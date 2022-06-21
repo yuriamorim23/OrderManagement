@@ -2,44 +2,57 @@ package com.javaproject.ordermanagement.DTO;
 
 import java.util.UUID;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.javaproject.ordermanagement.Entity.Client;
+
 public class ClientDTO {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	private UUID id;
 	
-	@NotEmpty(message="Preenchimento obrigatório")
-	@Length(min=5, max=120, message="O tamanho deve ser entre 5 e 120 caracteres")
+	@NotEmpty(message="The field needs to be filled")
+	@Length(min=5, max=120, message="Must contain between 5 and 120 characters")
 	private String firstName;
 	
-	@NotEmpty(message="Preenchimento obrigatório")
-	@Length(min=5, max=120, message="O tamanho deve ser entre 5 e 120 caracteres")
+	@NotEmpty(message="The field needs to be filled")
+	@Length(min=5, max=120, message="Must contain between 5 and 120 characters")
 	private String lastName;
 	
-	@NotEmpty(message="Preenchimento obrigatório")
+	@NotEmpty(message="The field needs to be filled")
 	private String address;
 	
-	@NotEmpty(message="Preenchimento obrigatório")
+	@NotEmpty(message="The field needs to be filled")
 	private String postCode;
 	
-	@NotEmpty(message="Preenchimento obrigatório")
-	@Length(min=10, message="Deve conter no minimo 10 numeros")
+	@NotEmpty(message="The field needs to be filled")
+	@Length(min=10, message="must contain at least 10 characters")
 	private String phoneNumber; 
 	
-	@NotEmpty(message="Preenchimento obrigatório")
-	@Length(min=5, max=120, message="O tamanho deve conter no máximo de 120 caracteres")
-	@Email(message="Email inválido")
+	@NotEmpty(message="The field needs to be filled")
+	@Length(min=5, max=120, message="Must contain between 5 and 120 characters")
+	@Email(message="Invalid email")
 	private String email;
 	
 	public ClientDTO() {}
+
+	public ClientDTO(UUID id, String firstName, String lastName, String email, String phoneNumber) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+	}
+	
+	public ClientDTO(Client object) {
+		firstName = object.getFirstName();
+		lastName = object.getLastName();
+		email = object.getEmail();
+		phoneNumber = object.getPhoneNumber();
+	}
 
 	public UUID getId() {
 		return id;

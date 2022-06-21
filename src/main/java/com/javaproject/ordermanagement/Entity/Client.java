@@ -1,7 +1,7 @@
 package com.javaproject.ordermanagement.Entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "client")
@@ -22,8 +24,12 @@ public class Client implements Serializable {
 	private UUID id;
 	
 	@Column(unique = true)
-	private LocalDateTime created;
-	private LocalDateTime updated;
+	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
+	private Date created;
+	
+	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
+	private Date updated;
+	
 	private String firstName;
 	private String lastName;
 	private String address;
@@ -33,9 +39,8 @@ public class Client implements Serializable {
 	
 	public Client() {}
 
-	public Client(UUID id, LocalDateTime created, LocalDateTime updated, String firstName, String lastName,
-			String address, String postCode, String phoneNumber, String email) {
-		super();
+	public Client(UUID id, Date created, Date updated, String firstName, String lastName, String address,
+			String postCode, String phoneNumber, String email) {
 		this.id = id;
 		this.created = created;
 		this.updated = updated;
@@ -55,20 +60,20 @@ public class Client implements Serializable {
 		this.id = id;
 	}
 
-	public LocalDateTime getCreated() {
+	public Date getCreated() {
 		return created;
 	}
 
-	public void setCreated(LocalDateTime created) {
-		this.created = created;
+	public Date setCreated(Date created) {
+		return this.created = created;
 	}
 
-	public LocalDateTime getUpdated() {
+	public Date getUpdated() {
 		return updated;
 	}
 
-	public void setUpdated(LocalDateTime updated) {
-		this.updated = updated;
+	public Date setUpdated(Date updated) {
+		return this.updated = updated;
 	}
 
 	public String getFirstName() {
@@ -135,5 +140,4 @@ public class Client implements Serializable {
 		Client other = (Client) obj;
 		return Objects.equals(id, other.id);
 	}
-	
 }
