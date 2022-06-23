@@ -1,9 +1,6 @@
-package com.javaproject.ordermanagement.Entity;
+package com.javaproject.ordermanagement.Entities;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,24 +9,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
-@Table(name = "client")
-public class Client implements Serializable {
+@Table(name = "Client")
+public class Client extends Identify implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(unique = true)
-	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
-	private Date created;
-	
-	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
-	private Date updated;
-	
 	private String firstName;
 	private String lastName;
 	private String address;
@@ -39,11 +28,10 @@ public class Client implements Serializable {
 	
 	public Client() {}
 
-	public Client(UUID id, Date created, Date updated, String firstName, String lastName, String address,
-			String postCode, String phoneNumber, String email) {
+	public Client(Long id, String firstName, String lastName, String address, String postCode, String phoneNumber,
+			String email) {
+		super();
 		this.id = id;
-		this.created = created;
-		this.updated = updated;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.address = address;
@@ -52,28 +40,12 @@ public class Client implements Serializable {
 		this.email = email;
 	}
 
-	public UUID getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public Date setCreated(Date created) {
-		return this.created = created;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public Date setUpdated(Date updated) {
-		return this.updated = updated;
 	}
 
 	public String getFirstName() {
@@ -123,21 +95,5 @@ public class Client implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Client other = (Client) obj;
-		return Objects.equals(id, other.id);
-	}
+	
 }

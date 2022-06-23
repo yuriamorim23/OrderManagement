@@ -1,36 +1,36 @@
 package com.javaproject.ordermanagement.DTO;
 
-import com.javaproject.ordermanagement.Entities.Client;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
-public class ClientDTO {
+import org.hibernate.validator.constraints.Length;
+
+public class UserForm {
 	
-	private Long id;
+	@NotEmpty(message="The field needs to be filled")
+	@Length(min=5, max=120, message="Must contain between 5 and 120 characters")
 	private String firstName;
+	
+	@NotEmpty(message="The field needs to be filled")
+	@Length(min=5, max=120, message="Must contain between 5 and 120 characters")
 	private String lastName;
+	
+	@NotEmpty(message="The field needs to be filled")
 	private String address;
+	
+	@NotEmpty(message="The field needs to be filled")
 	private String postCode;
+	
+	@NotEmpty(message="The field needs to be filled")
+	@Length(min=10, message="must contain at least 10 characters")
 	private String phoneNumber; 
+	
+	@NotEmpty(message="The field needs to be filled")
+	@Length(min=5, max=120, message="Must contain between 5 and 120 characters")
+	@Email(message="Invalid email")
 	private String email;
 	
-	public ClientDTO() {}
-	
-	public ClientDTO(Client client) {
-		this.id = client.getId();
-		this.firstName = client.getFirstName();
-		this.lastName = client.getLastName();
-		this.address = client.getAddress();
-		this.postCode = client.getPostCode();
-		this.phoneNumber = client.getPhoneNumber();
-		this.email = client.getEmail();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	public UserForm() {}
 
 	public String getFirstName() {
 		return firstName;
