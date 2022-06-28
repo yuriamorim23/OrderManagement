@@ -1,0 +1,12 @@
+com\javaproject\ordermanagement\Entities\Identify.class
+com\javaproject\ordermanagement\Repositories\ClientRepository.class
+com\javaproject\ordermanagement\Validation\ErrorHandler.class
+com\javaproject\ordermanagement\Service\ClientService.class
+com\javaproject\ordermanagement\DTO\ClientDTO.class
+com\javaproject\ordermanagement\DTO\UserForm.class
+com\javaproject\ordermanagement\OrderManagementApplication.class
+com\javaproject\ordermanagement\Controller\ClientController.class
+com\javaproject\ordermanagement\DTO\ClientUpdateForm.class
+com\javaproject\ordermanagement\Validation\ErrorFormDto.class
+com\javaproject\ordermanagement\Entities\Client.class
+com\javaproject\ordermanagement\Configurations\SwaggerConfig.class
