@@ -19,7 +19,6 @@ public class ClientService {
 	@Autowired
 	private ClientRepository repository;
 	
-	
 	public List<ClientDTO> Get(){
 		List<Client> all = repository.findAll();
 		return convertListToDto(all);
@@ -90,10 +89,4 @@ public class ClientService {
 	public static List<ClientDTO> convertListToDto(List<Client> clients){
 		return clients.stream().map(ClientDTO::new).collect(Collectors.toList());
 	}
-
-	public ClientDTO UpdateClientCommand() {
-		
-		return null;
-	}
-	
 }

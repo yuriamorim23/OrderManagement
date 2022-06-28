@@ -30,6 +30,18 @@
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 		</dependency>
+		 
+		 <!-- SWAGGER -->
+		 
+		 <dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		
+		<!-- http://localhost:8080/swagger-ui/index.html#/ -->
+		
+		<!-- SWAGGER -->
 
 		<dependency>
 			<groupId>org.hibernate</groupId>

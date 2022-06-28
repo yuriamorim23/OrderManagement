@@ -22,18 +22,18 @@ import com.javaproject.ordermanagement.DTO.UserForm;
 import com.javaproject.ordermanagement.Service.ClientService;
 
 @RestController
-@RequestMapping(value="api/v1/client")
+@RequestMapping(value="api/v1/")
 public class ClientController {
 
 	@Autowired
 	private ClientService service;
-			
-	@GetMapping
+	
+	@GetMapping("/client")
 	public List<ClientDTO> list(){
 		return service.Get();
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("client/{id}")
 	public ClientDTO FindById(@PathVariable("id") Long id){
 		return service.GetById(id);
 	}
@@ -49,7 +49,7 @@ public class ClientController {
 		return service.UpdateClientCommand(form, id);
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("client/{id}")
 	public void deleteById(@PathVariable("id") Long id) {
 		service.deleteById(id);
 	}	
