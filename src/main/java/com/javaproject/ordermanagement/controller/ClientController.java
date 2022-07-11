@@ -20,8 +20,8 @@ public interface ClientController {
 	
 	ResponseEntity<ClientDTO> register(@RequestBody @Valid ClientForm form);
 	
-	/*ResponseEntity<ClientDTO> updateById(@RequestBody ClientUpdateForm form, @PathVariable("id") Long id);*/
-	
 	ClientDTO updateById(@RequestBody ClientUpdateForm form, @PathVariable("id") Long id);
+	
+	void deleteById(@PathVariable("id") Long id);
 
 }

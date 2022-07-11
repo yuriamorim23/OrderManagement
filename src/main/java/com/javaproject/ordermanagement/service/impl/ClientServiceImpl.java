@@ -13,6 +13,7 @@ import com.javaproject.ordermanagement.dto.ClientDTO;
 import com.javaproject.ordermanagement.dto.ClientForm;
 import com.javaproject.ordermanagement.dto.ClientUpdateForm;
 import com.javaproject.ordermanagement.entities.Client;
+import com.javaproject.ordermanagement.exception.ClientDeleted;
 import com.javaproject.ordermanagement.exception.ExceptionHandlerAdvice;
 import com.javaproject.ordermanagement.repositories.ClientRepository;
 import com.javaproject.ordermanagement.service.ClientService;
@@ -32,6 +33,7 @@ public class ClientServiceImpl implements ClientService {
 		return clients.stream().map(ClientDTO::new).collect(Collectors.toList());
 	}
 	
+	@Transactional
 	public ClientDTO findById(Long id) {
 		Optional<Client> optional = repository.findById(id);
 		if(optional.isPresent()) {
@@ -48,6 +50,7 @@ public class ClientServiceImpl implements ClientService {
 		
 	}
 	
+	@Transactional
 	public ClientDTO UpdateClientCommand(ClientUpdateForm form, Long Id) {
 		Optional<Client> op = repository.findById(Id);
 		if(op.isPresent()) {
@@ -66,28 +69,17 @@ public class ClientServiceImpl implements ClientService {
 		}
 		return null;
 	}
-	
-	/*@Transactional
-	public ClientDTO UpdateClientCommand(ClientUpdateForm form, Long id) {
-        Optional<Client> client = repository.findById(id);
-        if(client.isPresent()) {
-        	Client obj = client.get();
-        	if(form.getEmail() == null) {
-        		throw new ExceptionHandlerAdvice();
-        	}else {
-        		obj.setEmail(form.getEmail());
-        	}
-        	if(form.getAddress() == null) {
-        		throw new ExceptionHandlerAdvice();
-        	}else {
-        		obj.setAddress(form.getAddress());
-        	}
-        	repository.save(obj);
-        	return convertToDto(obj);
-        }
-        return null;
-	}*/
 
+	@Transactional
+	public void deleteById(Long id) {
+		if(repository.existsById(id)) {
+			repository.deleteById(id);
+			throw new ClientDeleted();
+		}else {
+			throw new ExceptionHandlerAdvice();
+		}
+	}
+	
 	public Client convertToBusiness(ClientForm form) {
 		Client client = new Client();
 		client.setFirstName(form.getFirstName());

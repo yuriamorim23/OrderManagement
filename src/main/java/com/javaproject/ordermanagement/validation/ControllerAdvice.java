@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.javaproject.ordermanagement.exception.ClientDeleted;
 import com.javaproject.ordermanagement.exception.ExceptionHandlerAdvice;
 
 @RestControllerAdvice
@@ -16,6 +17,13 @@ public class ControllerAdvice {
 	public ResponseEntity<MessageExceptionHandler> productNotFound(ExceptionHandlerAdvice exception){
 		MessageExceptionHandler error = new MessageExceptionHandler(new Date(), HttpStatus.NOT_FOUND.value(), "Client not found");
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+		
+	}
+	
+	@ExceptionHandler(ClientDeleted.class)
+	public ResponseEntity<MessageExceptionHandler> clientDeleted(ClientDeleted exception){
+		MessageExceptionHandler error = new MessageExceptionHandler(new Date(), HttpStatus.OK.value(), "Client deleted with success!");
+		return new ResponseEntity<>(error, HttpStatus.OK);
 		
 	}
 }

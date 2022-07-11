@@ -15,5 +15,7 @@ public interface ClientService {
 	ClientDTO createClientCommand(ClientForm form);
 
 	ClientDTO UpdateClientCommand(ClientUpdateForm form, Long Id);
+	
+	void deleteById(Long id);
 
 }

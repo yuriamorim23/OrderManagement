@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,17 +23,17 @@ import com.javaproject.ordermanagement.dto.ClientUpdateForm;
 import com.javaproject.ordermanagement.service.ClientService;
 
 @RestController
-@RequestMapping(value="api/v1/")
+@RequestMapping(value = "api/v1/")
 public class ClientControllerImpl implements ClientController {
 
 	@Autowired
 	private ClientService service;
-	
+
 	@GetMapping("/client")
-	public ResponseEntity<List<ClientDTO>> findAll(){
+	public ResponseEntity<List<ClientDTO>> findAll() {
 		return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("client/{id}")
 	public ResponseEntity<ClientDTO> findById(@PathVariable("id") Long id){
 		return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
@@ -47,5 +48,10 @@ public class ClientControllerImpl implements ClientController {
 	public ClientDTO updateById(@RequestBody @Valid ClientUpdateForm form, @PathVariable("id") Long id) {
 		return service.UpdateClientCommand(form, id);
 	}
-	
-}	
+
+	@DeleteMapping("/{id}")
+	public void deleteById(@PathVariable("id") Long id) {
+		service.deleteById(id);
+	}
+
+}
