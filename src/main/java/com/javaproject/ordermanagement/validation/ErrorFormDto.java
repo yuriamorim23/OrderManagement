@@ -1,4 +1,4 @@
-package com.javaproject.ordermanagement.Validation;
+package com.javaproject.ordermanagement.validation;
 
 public class ErrorFormDto {
 

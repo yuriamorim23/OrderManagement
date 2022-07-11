@@ -1,4 +1,4 @@
-package com.javaproject.ordermanagement.Entities;
+package com.javaproject.ordermanagement.entities;
 
 import java.util.Date;
 import java.util.UUID;
@@ -9,7 +9,7 @@ import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class Identify {
+public class Identity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,9 +20,9 @@ public class Identify {
 	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
 	private Date updatedBy = new Date();
 	
-	public Identify() {}
+	public Identity() {}
 
-	public Identify(UUID uuid, Date createdBy, Date updatedBy) {
+	public Identity(UUID uuid, Date createdBy, Date updatedBy) {
 		super();
 		this.uuid = uuid;
 		this.createdBy = createdBy;

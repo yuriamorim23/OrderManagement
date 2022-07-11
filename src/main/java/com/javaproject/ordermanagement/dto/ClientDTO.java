@@ -1,6 +1,6 @@
-package com.javaproject.ordermanagement.DTO;
+package com.javaproject.ordermanagement.dto;
 
-import com.javaproject.ordermanagement.Entities.Client;
+import com.javaproject.ordermanagement.entities.Client;
 
 public class ClientDTO {
 	

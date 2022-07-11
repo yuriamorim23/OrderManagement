@@ -1,4 +1,4 @@
-package com.javaproject.ordermanagement.Validation;
+package com.javaproject.ordermanagement.validation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,5 +33,4 @@ public class ErrorHandler {
         });
         return dto;
     }
-
 }

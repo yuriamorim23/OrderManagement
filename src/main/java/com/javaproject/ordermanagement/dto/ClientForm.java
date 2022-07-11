@@ -1,11 +1,11 @@
-package com.javaproject.ordermanagement.DTO;
+package com.javaproject.ordermanagement.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-public class UserForm {
+public class ClientForm {
 	
 	@NotEmpty(message="The field needs to be filled")
 	@Length(min=5, max=120, message="Must contain between 5 and 120 characters")
@@ -21,8 +21,7 @@ public class UserForm {
 	@NotEmpty(message="The field needs to be filled")
 	private String postCode;
 	
-	@NotEmpty(message="The field needs to be filled")
-	@Length(min=10, message="must contain at least 10 characters")
+	@Length(min=10, message="Must contain at least 10 characters")
 	private String phoneNumber; 
 	
 	@NotEmpty(message="The field needs to be filled")
@@ -30,7 +29,7 @@ public class UserForm {
 	@Email(message="Invalid email")
 	private String email;
 	
-	public UserForm() {}
+	public ClientForm() {}
 
 	public String getFirstName() {
 		return firstName;

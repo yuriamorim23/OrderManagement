@@ -1,15 +1,18 @@
-package com.javaproject.ordermanagement.DTO;
+package com.javaproject.ordermanagement.dto;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class ClientUpdateForm {
 	
-	@NotBlank(message = "Field cannot be blank")
+	@NotNull(message = "Field cannot be blank")
 	private String address;
+	@NotNull(message = "Field cannot be blank")
 	private String postCode;
+	
 	private String phoneNumber;
 	
+	@NotNull(message = "Field cannot be blank")
 	@Email(message = "Invalid email")
 	private String email;
 	

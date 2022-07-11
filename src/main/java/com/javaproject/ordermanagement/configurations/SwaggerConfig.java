@@ -1,4 +1,4 @@
-package com.javaproject.ordermanagement.Configurations;
+package com.javaproject.ordermanagement.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

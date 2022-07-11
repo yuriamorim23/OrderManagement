@@ -1,4 +1,4 @@
-package com.javaproject.ordermanagement.Entities;
+package com.javaproject.ordermanagement.entities;
 
 import java.io.Serializable;
 
@@ -11,11 +11,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Client")
-public class Client extends Identify implements Serializable {
+public class Client extends Identity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
 	@Column(unique = true)
