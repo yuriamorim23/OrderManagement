@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.javaproject.ordermanagement.exception.ClientDeleted;
 import com.javaproject.ordermanagement.exception.ExceptionHandlerAdvice;
+import com.javaproject.ordermanagement.exception.MinPriceValidation;
 
 @RestControllerAdvice
 public class ControllerAdvice {
@@ -24,6 +25,13 @@ public class ControllerAdvice {
 	public ResponseEntity<MessageExceptionHandler> clientDeleted(ClientDeleted exception){
 		MessageExceptionHandler error = new MessageExceptionHandler(new Date(), HttpStatus.OK.value(), "Client deleted with success!");
 		return new ResponseEntity<>(error, HttpStatus.OK);
+		
+	}
+	
+	@ExceptionHandler(MinPriceValidation.class)
+	public ResponseEntity<MessageExceptionHandler> priceValidation(MinPriceValidation exception){
+		MessageExceptionHandler error = new MessageExceptionHandler(new Date(), HttpStatus.BAD_REQUEST.value(), "The minPrice must be lower than the Price!");
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 		
 	}
 }

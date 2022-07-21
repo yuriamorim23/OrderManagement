@@ -47,7 +47,6 @@ public class ClientServiceImpl implements ClientService {
 		Client client = convertToBusiness(form);
 		client = repository.save(client);
 		return convertToDto(client);
-		
 	}
 	
 	@Transactional
