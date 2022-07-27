@@ -13,9 +13,8 @@ import com.javaproject.ordermanagement.dto.ProductDTO;
 import com.javaproject.ordermanagement.dto.ProductSubmit;
 import com.javaproject.ordermanagement.dto.ProductUpdate;
 import com.javaproject.ordermanagement.entities.Product;
-import com.javaproject.ordermanagement.exception.ClientDeleted;
-import com.javaproject.ordermanagement.exception.ExceptionHandlerAdvice;
 import com.javaproject.ordermanagement.exception.MinPriceValidation;
+import com.javaproject.ordermanagement.exception.ProductNotFound;
 import com.javaproject.ordermanagement.repositories.ProductRepository;
 import com.javaproject.ordermanagement.service.ProductService;
 
@@ -40,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
 		if(optional.isPresent()) {
 			return convertToDto(optional.get());
 		}
-		throw new ExceptionHandlerAdvice();
+		throw new ProductNotFound();
 	}
 
 	@Transactional
@@ -54,33 +53,35 @@ public class ProductServiceImpl implements ProductService {
 		return convertToDto(product);
 	}
 
-	/*@Transactional
+	@Transactional
 	public ProductDTO UpdateProductCommand(ProductUpdate update, Long Id) {
 		Optional<Product> op = repository.findById(Id);
 		if(op.isPresent()) {
 			Product obj = op.get();
 			if(update.getDescription() != null 
 					&& update.getMinPrince() != null 
-					&& form.getPhoneNumber() != null 
-					&& form.getEmail() != null) {
-				obj.setAddress(form.getAddress());
-				obj.setPostCode(form.getPostCode());
-				obj.setPhoneNumber(form.getPhoneNumber());
-				obj.setEmail(form.getEmail());
+					&& update.getPrice() != null
+					&& update.getStockQuantity() != null) {
+				if(update.getMinPrince() > update.getPrice()) {
+					throw new MinPriceValidation();
+				}
+				obj.setDescription(update.getDescription());
+				obj.setMinPrince(update.getMinPrince());
+				obj.setPrice(update.getPrice());
+				obj.setStockQuantity(update.getStockQuantity());
 			}
 			repository.save(obj);
 			return convertToDto(obj);
 		}
 		return null;
-	}*/
+	}
 
 	@Transactional
 	public void deleteById(Long id) {
 		if(repository.existsById(id)) {
 			repository.deleteById(id);
-			throw new ClientDeleted();
 		}else {
-			throw new ExceptionHandlerAdvice();
+			throw new ProductNotFound();
 		}
 	}
 	
@@ -103,11 +104,5 @@ public class ProductServiceImpl implements ProductService {
 		dto.setMinPrince(product.getMinPrince());
 		dto.setStockQuantity(product.getStockQuantity());
 		return dto;
-	}
-
-	@Override
-	public ProductDTO UpdateProductCommand(ProductUpdate update, Long Id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

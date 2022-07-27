@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.javaproject.ordermanagement.exception.ClientDeleted;
 import com.javaproject.ordermanagement.exception.ExceptionHandlerAdvice;
 import com.javaproject.ordermanagement.exception.MinPriceValidation;
+import com.javaproject.ordermanagement.exception.ProductNotFound;
 
 @RestControllerAdvice
 public class ControllerAdvice {
@@ -21,17 +21,17 @@ public class ControllerAdvice {
 		
 	}
 	
-	@ExceptionHandler(ClientDeleted.class)
-	public ResponseEntity<MessageExceptionHandler> clientDeleted(ClientDeleted exception){
-		MessageExceptionHandler error = new MessageExceptionHandler(new Date(), HttpStatus.OK.value(), "Client deleted with success!");
-		return new ResponseEntity<>(error, HttpStatus.OK);
-		
-	}
-	
 	@ExceptionHandler(MinPriceValidation.class)
 	public ResponseEntity<MessageExceptionHandler> priceValidation(MinPriceValidation exception){
 		MessageExceptionHandler error = new MessageExceptionHandler(new Date(), HttpStatus.BAD_REQUEST.value(), "The minPrice must be lower than the Price!");
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	@ExceptionHandler(ProductNotFound.class)
+	public ResponseEntity<MessageExceptionHandler> findProductById(ProductNotFound exception){
+		MessageExceptionHandler error = new MessageExceptionHandler(new Date(), HttpStatus.NOT_FOUND.value(), "Product not found!");
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 		
 	}
 }

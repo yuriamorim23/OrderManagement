@@ -13,7 +13,6 @@ import com.javaproject.ordermanagement.dto.ClientDTO;
 import com.javaproject.ordermanagement.dto.ClientForm;
 import com.javaproject.ordermanagement.dto.ClientUpdateForm;
 import com.javaproject.ordermanagement.entities.Client;
-import com.javaproject.ordermanagement.exception.ClientDeleted;
 import com.javaproject.ordermanagement.exception.ExceptionHandlerAdvice;
 import com.javaproject.ordermanagement.repositories.ClientRepository;
 import com.javaproject.ordermanagement.service.ClientService;
@@ -73,7 +72,6 @@ public class ClientServiceImpl implements ClientService {
 	public void deleteById(Long id) {
 		if(repository.existsById(id)) {
 			repository.deleteById(id);
-			throw new ClientDeleted();
 		}else {
 			throw new ExceptionHandlerAdvice();
 		}

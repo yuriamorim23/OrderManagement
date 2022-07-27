@@ -1,6 +1,8 @@
 package com.javaproject.ordermanagement.dto;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -10,15 +12,16 @@ public class ProductUpdate {
 	@Length(min=2, max=120, message="Must contain between 2 and 120 characters")
 	private String description;
 	
-	@NotEmpty(message="The field needs to be filled")
-	@Length(min=4, max=120, message="Must contain minimum value 00,00")
+	@NotNull(message="The field needs to be filled")
+	@DecimalMin(value = "0.1", message = "Please Enter a valid value Amount ex: 0.1")
 	private Double price;
 	
-	@NotEmpty(message="The field needs to be filled")
-	@Length(min=4, max=120, message="Must contain minimum value 00,00")
+	@NotNull(message="The field needs to be filled")
+	@DecimalMin(value = "0.1", message = "Please Enter a valid value Amount ex: 0.1")
 	private Double minPrince;
 	
-	@NotEmpty(message="The field needs to be filled")
+	@NotNull(message="The field needs to be filled")
+	@DecimalMin(value = "0", message = "Please Enter a valid value Amount ex: 1")
 	private Integer stockQuantity;
 
 	public String getDescription() {
