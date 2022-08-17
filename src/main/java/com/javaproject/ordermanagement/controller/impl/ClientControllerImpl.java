@@ -17,39 +17,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javaproject.ordermanagement.controller.ClientController;
-import com.javaproject.ordermanagement.dto.GetClientQueryResult;
 import com.javaproject.ordermanagement.dto.CreateClientCommand;
+import com.javaproject.ordermanagement.dto.GetClientQueryResult;
 import com.javaproject.ordermanagement.dto.UpdateClientCommand;
 import com.javaproject.ordermanagement.service.ClientService;
 
 @RestController
-@RequestMapping(value = "api/v1/")
+@RequestMapping(value = "api/v1/client")
 public class ClientControllerImpl implements ClientController {
 
 	@Autowired
 	private ClientService service;
 
-	@GetMapping("/client")
+	@GetMapping
 	public ResponseEntity<List<GetClientQueryResult>> findAll() {
 		return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
 	}
 
-	@GetMapping("client/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<GetClientQueryResult> findById(@PathVariable("id") Long id) {
 		return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
 	}
 
-	@PostMapping("/client")
-	public ResponseEntity<GetClientQueryResult> register(@RequestBody @Valid CreateClientCommand createClientCommand) {
-		return new ResponseEntity<>(service.createClientCommand(createClientCommand), HttpStatus.CREATED);
+	@PostMapping
+	public ResponseEntity<GetClientQueryResult> createClient(
+			@RequestBody @Valid CreateClientCommand createClientCommand) {
+		return new ResponseEntity<>(service.createClient(createClientCommand), HttpStatus.CREATED);
 	}
 
-	@PutMapping("client/{id}")
-	public GetClientQueryResult updateById(@RequestBody @Valid UpdateClientCommand updateClientCommand, @PathVariable("id") Long id) {
-		return service.UpdateClientCommand(updateClientCommand, id);
+	@PutMapping("/{id}")
+	public ResponseEntity<GetClientQueryResult> updateClient(
+			@RequestBody @Valid UpdateClientCommand updateClientCommand, @PathVariable("id") Long id) {
+		return new ResponseEntity<>(service.updateClient(updateClientCommand, id), HttpStatus.NO_CONTENT);
 	}
 
-	@DeleteMapping("client/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable("id") Long id) {
 		service.deleteById(id);
 	}

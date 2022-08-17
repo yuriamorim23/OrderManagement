@@ -22,6 +22,10 @@ public class OrderItem implements Serializable {
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "order_id")
 	private Order order;
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Product product;
 
 	@Column(unique = true)
 	private Double price;
@@ -29,11 +33,21 @@ public class OrderItem implements Serializable {
 
 	public OrderItem() {}
 
-	public OrderItem(Order order, Double price, Double quantity) {
+	public OrderItem(Long id, Order order, Product product, Double price, Double quantity) {
 		super();
+		this.id = id;
 		this.order = order;
+		this.product = product;
 		this.price = price;
 		this.quantity = quantity;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Order getOrder() {
@@ -42,6 +56,14 @@ public class OrderItem implements Serializable {
 
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	public Double getPrice() {

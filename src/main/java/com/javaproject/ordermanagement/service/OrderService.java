@@ -12,9 +12,9 @@ public interface OrderService {
 	
 	GetOrderQueryResult findById(Long id);
 
-	GetOrderQueryResult createOrderCommand(CreateOrderCommand submit);
+	GetOrderQueryResult createOrder(CreateOrderCommand createOrderCommand);
 
-	GetOrderQueryResult updateOrderCommand(UpdateOrderCommand update, Long Id);
+	GetOrderQueryResult updateOrder(UpdateOrderCommand updateOrderCommand, Long Id);
 
 	void deleteById(Long id);
 

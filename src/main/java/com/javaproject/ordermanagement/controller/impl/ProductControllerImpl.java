@@ -23,34 +23,34 @@ import com.javaproject.ordermanagement.dto.UpdateProductCommand;
 import com.javaproject.ordermanagement.service.ProductService;
 
 @RestController
-@RequestMapping(value = "api/v1/")
+@RequestMapping(value = "api/v1/product")
 public class ProductControllerImpl implements ProductController {
 	
 	@Autowired
 	private ProductService service;
 
-	@GetMapping("/product")
+	@GetMapping
 	public ResponseEntity<List<GetProductQueryResult>> findAll() {
 		return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
 	}
 
 
-	@GetMapping("product/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<GetProductQueryResult> findById(@PathVariable("id") Long id) {
 		return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
 	}
 
-	@PostMapping("/product")
-	public ResponseEntity<GetProductQueryResult> productRegister(@RequestBody @Valid CreateProductCommand createProductCommand) {
-		return new ResponseEntity<>(service.createProductCommand(createProductCommand), HttpStatus.CREATED);
+	@PostMapping
+	public ResponseEntity<GetProductQueryResult> productCreate(@RequestBody @Valid CreateProductCommand createProductCommand) {
+		return new ResponseEntity<>(service.createProduct(createProductCommand), HttpStatus.CREATED);
 	}
 
-	@PutMapping("product/{id}")
-	public GetProductQueryResult updateById(@RequestBody @Valid UpdateProductCommand updateProductCommand, @PathVariable("id") Long id) {
-		return service.UpdateProductCommand(updateProductCommand, id);
+	@PutMapping("/{id}")
+	public ResponseEntity<GetProductQueryResult> productUpdate(@RequestBody @Valid UpdateProductCommand updateProductCommand, @PathVariable("id") Long id) {
+		return new ResponseEntity<>(service.updateProduct(updateProductCommand, id), HttpStatus.NO_CONTENT);
 	}
 
-	@DeleteMapping("product/{id}")
+	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable("id") Long id) {
 		service.deleteById(id);
 	}	

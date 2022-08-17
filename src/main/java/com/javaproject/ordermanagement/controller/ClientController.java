@@ -18,9 +18,9 @@ public interface ClientController {
 
 	ResponseEntity<GetClientQueryResult> findById(@PathVariable("id") Long id);
 	
-	ResponseEntity<GetClientQueryResult> register(@RequestBody @Valid CreateClientCommand createClientCommand);
+	ResponseEntity<GetClientQueryResult> createClient(@RequestBody @Valid CreateClientCommand createClientCommand);
 	
-	GetClientQueryResult updateById(@RequestBody UpdateClientCommand updateClientCommand, @PathVariable("id") Long id);
+	ResponseEntity<GetClientQueryResult> updateClient(@RequestBody UpdateClientCommand updateClientCommand, @PathVariable("id") Long id);
 	
 	void deleteById(@PathVariable("id") Long id);
 

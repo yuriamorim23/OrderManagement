@@ -18,9 +18,9 @@ public interface ProductController {
 
 	ResponseEntity<GetProductQueryResult> findById(@PathVariable("id") Long id);
 	
-	ResponseEntity<GetProductQueryResult> productRegister(@RequestBody @Valid CreateProductCommand createProductCommand);
+	ResponseEntity<GetProductQueryResult> productCreate(@RequestBody @Valid CreateProductCommand createProductCommand);
 	
-	GetProductQueryResult updateById(@RequestBody UpdateProductCommand updateProductCommand, @PathVariable("id") Long id);
+	ResponseEntity<GetProductQueryResult> productUpdate(@RequestBody UpdateProductCommand updateProductCommand, @PathVariable("id") Long id);
 	
 	void deleteById(@PathVariable("id") Long id);
 

@@ -10,26 +10,32 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
 import com.javaproject.ordermanagement.dto.CreateOrderCommand;
+import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
 import com.javaproject.ordermanagement.dto.UpdateOrderCommand;
 import com.javaproject.ordermanagement.entities.Order;
+import com.javaproject.ordermanagement.entities.OrderItem;
+import com.javaproject.ordermanagement.entities.Product;
 import com.javaproject.ordermanagement.exception.ProductNotFound;
 import com.javaproject.ordermanagement.repositories.ClientRepository;
 import com.javaproject.ordermanagement.repositories.OrderRepository;
+import com.javaproject.ordermanagement.repositories.ProductRepository;
 import com.javaproject.ordermanagement.service.OrderService;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
 	@Autowired
-	private OrderRepository repository;
-	
+	private OrderRepository orderRepository;
+
 	@Autowired
 	private ClientRepository clientRepository;
 	
+	@Autowired
+	private ProductRepository productRepository;
+
 	public List<GetOrderQueryResult> findAll() {
-		List<Order> all = repository.findAll();
+		List<Order> all = orderRepository.findAll();
 		return convertListToDto(all);
 	}
 
@@ -39,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Transactional
 	public GetOrderQueryResult findById(Long id) {
-		Optional<Order> optional = repository.findById(id);
+		Optional<Order> optional = orderRepository.findById(id);
 		if (optional.isPresent()) {
 			return convertToDto(optional.get());
 		}
@@ -47,20 +53,16 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Transactional
-	public GetOrderQueryResult createOrderCommand(CreateOrderCommand createOrderCommand) {
+	public GetOrderQueryResult createOrder(CreateOrderCommand createOrderCommand) {
 		Order order = convertToBusiness(createOrderCommand);
-		if(createOrderCommand.getClient() == null) {
-			createOrderCommand.setClient(createOrderCommand.getClient());
-		}else {
-			order = repository.save(order);
-		}
+		order = orderRepository.save(order);
 		return convertToDto(order);
 	}
 
 	@Transactional
 	public void deleteById(Long id) {
-		if (repository.existsById(id)) {
-			repository.deleteById(id);
+		if (orderRepository.existsById(id)) {
+			orderRepository.deleteById(id);
 		} else {
 			throw new ProductNotFound();
 		}
@@ -72,6 +74,12 @@ public class OrderServiceImpl implements OrderService {
 		order.setMoreInfo(createOrderCommand.getMoreInfo());
 		order.setStatus(createOrderCommand.getStatus());
 		order.setCloseSoldDate(new Date());
+		for (OrderItem orderItems : order.getOrderItems()) {
+			orderItems.setProduct(productRepository.findById(orderItems.getProduct()).get());
+			orderItems.setOrder(orderRepository.findById(orderItems.getOrder().getId()));
+			orderItems.setPrice(orderItems.getPrice());
+			orderItems.setQuantity(orderItems.getQuantity());
+		}
 		return order;
 	}
 
@@ -85,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public GetOrderQueryResult updateOrderCommand(UpdateOrderCommand update, Long Id) {
+	public GetOrderQueryResult updateOrder(UpdateOrderCommand updateOrderCommand, Long Id) {
 		return null;
 	}
 

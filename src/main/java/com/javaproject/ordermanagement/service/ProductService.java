@@ -12,9 +12,9 @@ public interface ProductService {
 
 	GetProductQueryResult findById(Long id);
 
-	GetProductQueryResult createProductCommand(CreateProductCommand submit);
+	GetProductQueryResult createProduct(CreateProductCommand createProductCommand);
 
-	GetProductQueryResult UpdateProductCommand(UpdateProductCommand update, Long Id);
+	GetProductQueryResult updateProduct(UpdateProductCommand cpdateProductCommand, Long Id);
 
 	void deleteById(Long id);
 

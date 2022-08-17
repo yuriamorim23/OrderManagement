@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Transactional
-	public GetProductQueryResult createProductCommand(CreateProductCommand createProductCommand) {
+	public GetProductQueryResult createProduct(CreateProductCommand createProductCommand) {
 		Product product = convertToBusiness(createProductCommand);
 		if(createProductCommand.getMinPrince() > createProductCommand.getPrice()) {
 			throw new MinPriceValidation();
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Transactional
-	public GetProductQueryResult UpdateProductCommand(UpdateProductCommand updateProductCommand, Long Id) {
+	public GetProductQueryResult updateProduct(UpdateProductCommand updateProductCommand, Long Id) {
 		Optional<Product> op = repository.findById(Id);
 		if(op.isPresent()) {
 			Product obj = op.get();
