@@ -47,10 +47,10 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Transactional
-	public GetOrderQueryResult createOrderCommand(CreateOrderCommand submit) {
-		Order order = convertToBusiness(submit);
-		if(submit.getClient() == null) {
-			submit.setClient(submit.getClient());
+	public GetOrderQueryResult createOrderCommand(CreateOrderCommand createOrderCommand) {
+		Order order = convertToBusiness(createOrderCommand);
+		if(createOrderCommand.getClient() == null) {
+			createOrderCommand.setClient(createOrderCommand.getClient());
 		}else {
 			order = repository.save(order);
 		}
@@ -66,11 +66,11 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 
-	public Order convertToBusiness(CreateOrderCommand submit) {
+	public Order convertToBusiness(CreateOrderCommand createOrderCommand) {
 		Order order = new Order();
-		order.setClient(clientRepository.findById(submit.getClient()).get());
-		order.setMoreInfo(submit.getMoreInfo());
-		order.setStatus(submit.getStatus());
+		order.setClient(clientRepository.findById(createOrderCommand.getClient()).get());
+		order.setMoreInfo(createOrderCommand.getMoreInfo());
+		order.setStatus(createOrderCommand.getStatus());
 		order.setCloseSoldDate(new Date());
 		return order;
 	}

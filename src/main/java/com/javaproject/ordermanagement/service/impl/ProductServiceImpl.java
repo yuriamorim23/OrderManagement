@@ -43,9 +43,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Transactional
-	public GetProductQueryResult createProductCommand(CreateProductCommand submit) {
-		Product product = convertToBusiness(submit);
-		if(submit.getMinPrince() > submit.getPrice()) {
+	public GetProductQueryResult createProductCommand(CreateProductCommand createProductCommand) {
+		Product product = convertToBusiness(createProductCommand);
+		if(createProductCommand.getMinPrince() > createProductCommand.getPrice()) {
 			throw new MinPriceValidation();
 		}else {
 			product = repository.save(product);
@@ -54,21 +54,21 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Transactional
-	public GetProductQueryResult UpdateProductCommand(UpdateProductCommand update, Long Id) {
+	public GetProductQueryResult UpdateProductCommand(UpdateProductCommand updateProductCommand, Long Id) {
 		Optional<Product> op = repository.findById(Id);
 		if(op.isPresent()) {
 			Product obj = op.get();
-			if(update.getDescription() != null 
-					&& update.getMinPrince() != null 
-					&& update.getPrice() != null
-					&& update.getStockQuantity() != null) {
-				if(update.getMinPrince() > update.getPrice()) {
+			if(updateProductCommand.getDescription() != null 
+					&& updateProductCommand.getMinPrince() != null 
+					&& updateProductCommand.getPrice() != null
+					&& updateProductCommand.getStockQuantity() != null) {
+				if(updateProductCommand.getMinPrince() > updateProductCommand.getPrice()) {
 					throw new MinPriceValidation();
 				}
-				obj.setDescription(update.getDescription());
-				obj.setMinPrince(update.getMinPrince());
-				obj.setPrice(update.getPrice());
-				obj.setStockQuantity(update.getStockQuantity());
+				obj.setDescription(updateProductCommand.getDescription());
+				obj.setMinPrince(updateProductCommand.getMinPrince());
+				obj.setPrice(updateProductCommand.getPrice());
+				obj.setStockQuantity(updateProductCommand.getStockQuantity());
 			}
 			repository.save(obj);
 			return convertToDto(obj);
@@ -85,13 +85,13 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 	
-	public Product convertToBusiness(CreateProductCommand submit) {
+	public Product convertToBusiness(CreateProductCommand createProductCommand) {
 		Product product = new Product();
-		product.setCode(submit.getCode());
-		product.setDescription(submit.getDescription());
-		product.setPrice(submit.getPrice());
-		product.setMinPrince(submit.getMinPrince());
-		product.setStockQuantity(submit.getStockQuantity());
+		product.setCode(createProductCommand.getCode());
+		product.setDescription(createProductCommand.getDescription());
+		product.setPrice(createProductCommand.getPrice());
+		product.setMinPrince(createProductCommand.getMinPrince());
+		product.setStockQuantity(createProductCommand.getStockQuantity());
 		return product;
 	}
 	

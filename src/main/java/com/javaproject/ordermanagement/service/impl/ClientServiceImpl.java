@@ -42,25 +42,25 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	@Transactional
-	public GetClientQueryResult createClientCommand(CreateClientCommand form) {
-		Client client = convertToBusiness(form);
+	public GetClientQueryResult createClientCommand(CreateClientCommand createClientCommand) {
+		Client client = convertToBusiness(createClientCommand);
 		client = repository.save(client);
 		return convertToDto(client);
 	}
 	
 	@Transactional
-	public GetClientQueryResult UpdateClientCommand(UpdateClientCommand form, Long Id) {
+	public GetClientQueryResult UpdateClientCommand(UpdateClientCommand updateClientCommand, Long Id) {
 		Optional<Client> op = repository.findById(Id);
 		if(op.isPresent()) {
 			Client obj = op.get();
-			if(form.getAddress()  != null 
-					&& form.getPostCode() != null 
-					&& form.getPhoneNumber() != null 
-					&& form.getEmail() != null) {
-				obj.setAddress(form.getAddress());
-				obj.setPostCode(form.getPostCode());
-				obj.setPhoneNumber(form.getPhoneNumber());
-				obj.setEmail(form.getEmail());
+			if(updateClientCommand.getAddress()  != null 
+					&& updateClientCommand.getPostCode() != null 
+					&& updateClientCommand.getPhoneNumber() != null 
+					&& updateClientCommand.getEmail() != null) {
+				obj.setAddress(updateClientCommand.getAddress());
+				obj.setPostCode(updateClientCommand.getPostCode());
+				obj.setPhoneNumber(updateClientCommand.getPhoneNumber());
+				obj.setEmail(updateClientCommand.getEmail());
 			}
 			repository.save(obj);
 			return convertToDto(obj);
@@ -77,14 +77,14 @@ public class ClientServiceImpl implements ClientService {
 		}
 	}
 	
-	public Client convertToBusiness(CreateClientCommand form) {
+	public Client convertToBusiness(CreateClientCommand createClientCommand) {
 		Client client = new Client();
-		client.setFirstName(form.getFirstName());
-		client.setLastName(form.getLastName());
-		client.setAddress(form.getAddress());
-		client.setPostCode(form.getPostCode());
-		client.setPhoneNumber(form.getPhoneNumber());
-		client.setEmail(form.getEmail());
+		client.setFirstName(createClientCommand.getFirstName());
+		client.setLastName(createClientCommand.getLastName());
+		client.setAddress(createClientCommand.getAddress());
+		client.setPostCode(createClientCommand.getPostCode());
+		client.setPhoneNumber(createClientCommand.getPhoneNumber());
+		client.setEmail(createClientCommand.getEmail());
 		return client;
 	}
 	
