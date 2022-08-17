@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17-Ago-2022 às 17:50
+-- Tempo de geração: 17-Ago-2022 às 20:15
 -- Versão do servidor: 10.4.22-MariaDB
 -- versão do PHP: 8.1.1
 
@@ -120,7 +120,8 @@ CREATE TABLE `order_item` (
   `price` double DEFAULT NULL,
   `quantity` double DEFAULT NULL,
   `order_id` bigint(20) NOT NULL,
-  `id` bigint(20) NOT NULL
+  `id` bigint(20) NOT NULL,
+  `product_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -174,7 +175,8 @@ ALTER TABLE `order_client`
 --
 ALTER TABLE `order_item`
   ADD PRIMARY KEY (`order_id`),
-  ADD UNIQUE KEY `UK_61dvm4p9kamoh183lj8a1jqex` (`price`);
+  ADD UNIQUE KEY `UK_61dvm4p9kamoh183lj8a1jqex` (`price`),
+  ADD KEY `FK551losx9j75ss5d6bfsqvijna` (`product_id`);
 
 --
 -- Índices para tabela `product`
@@ -198,6 +200,7 @@ ALTER TABLE `order_client`
 -- Limitadores para a tabela `order_item`
 --
 ALTER TABLE `order_item`
+  ADD CONSTRAINT `FK551losx9j75ss5d6bfsqvijna` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   ADD CONSTRAINT `FK5dojljkm6lipf2hw3su7ylqlx` FOREIGN KEY (`order_id`) REFERENCES `order_client` (`id`);
 COMMIT;
 
