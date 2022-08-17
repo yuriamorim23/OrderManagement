@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javaproject.ordermanagement.controller.ClientController;
-import com.javaproject.ordermanagement.dto.ClientDTO;
-import com.javaproject.ordermanagement.dto.ClientForm;
-import com.javaproject.ordermanagement.dto.ClientUpdateForm;
+import com.javaproject.ordermanagement.dto.GetClientQueryResult;
+import com.javaproject.ordermanagement.dto.CreateClientCommand;
+import com.javaproject.ordermanagement.dto.UpdateClientCommand;
 import com.javaproject.ordermanagement.service.ClientService;
 
 @RestController
@@ -30,23 +30,23 @@ public class ClientControllerImpl implements ClientController {
 	private ClientService service;
 
 	@GetMapping("/client")
-	public ResponseEntity<List<ClientDTO>> findAll() {
+	public ResponseEntity<List<GetClientQueryResult>> findAll() {
 		return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("client/{id}")
-	public ResponseEntity<ClientDTO> findById(@PathVariable("id") Long id) {
+	public ResponseEntity<GetClientQueryResult> findById(@PathVariable("id") Long id) {
 		return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/client")
-	public ResponseEntity<ClientDTO> register(@RequestBody @Valid ClientForm form) {
-		return new ResponseEntity<>(service.createClientCommand(form), HttpStatus.CREATED);
+	public ResponseEntity<GetClientQueryResult> register(@RequestBody @Valid CreateClientCommand createClientCommand) {
+		return new ResponseEntity<>(service.createClientCommand(createClientCommand), HttpStatus.CREATED);
 	}
 
 	@PutMapping("client/{id}")
-	public ClientDTO updateById(@RequestBody @Valid ClientUpdateForm form, @PathVariable("id") Long id) {
-		return service.UpdateClientCommand(form, id);
+	public GetClientQueryResult updateById(@RequestBody @Valid UpdateClientCommand updateClientCommand, @PathVariable("id") Long id) {
+		return service.UpdateClientCommand(updateClientCommand, id);
 	}
 
 	@DeleteMapping("client/{id}")

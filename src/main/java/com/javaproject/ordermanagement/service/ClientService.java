@@ -2,19 +2,19 @@ package com.javaproject.ordermanagement.service;
 
 import java.util.List;
 
-import com.javaproject.ordermanagement.dto.ClientDTO;
-import com.javaproject.ordermanagement.dto.ClientForm;
-import com.javaproject.ordermanagement.dto.ClientUpdateForm;
+import com.javaproject.ordermanagement.dto.GetClientQueryResult;
+import com.javaproject.ordermanagement.dto.CreateClientCommand;
+import com.javaproject.ordermanagement.dto.UpdateClientCommand;
 
 public interface ClientService {
 
-	List<ClientDTO> findAll();
+	List<GetClientQueryResult> findAll();
 
-	ClientDTO findById(Long id);
+	GetClientQueryResult findById(Long id);
 	
-	ClientDTO createClientCommand(ClientForm form);
+	GetClientQueryResult createClientCommand(CreateClientCommand form);
 
-	ClientDTO UpdateClientCommand(ClientUpdateForm form, Long Id);
+	GetClientQueryResult UpdateClientCommand(UpdateClientCommand form, Long Id);
 	
 	void deleteById(Long id);
 

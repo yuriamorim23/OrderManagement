@@ -2,19 +2,19 @@ package com.javaproject.ordermanagement.service;
 
 import java.util.List;
 
-import com.javaproject.ordermanagement.dto.ProductDTO;
-import com.javaproject.ordermanagement.dto.ProductSubmit;
-import com.javaproject.ordermanagement.dto.ProductUpdate;
+import com.javaproject.ordermanagement.dto.GetProductQueryResult;
+import com.javaproject.ordermanagement.dto.CreateProductCommand;
+import com.javaproject.ordermanagement.dto.UpdateProductCommand;
 
 public interface ProductService {
 
-	List<ProductDTO> findAll();
+	List<GetProductQueryResult> findAll();
 
-	ProductDTO findById(Long id);
+	GetProductQueryResult findById(Long id);
 
-	ProductDTO createProductCommand(ProductSubmit submit);
+	GetProductQueryResult createProductCommand(CreateProductCommand submit);
 
-	ProductDTO UpdateProductCommand(ProductUpdate update, Long Id);
+	GetProductQueryResult UpdateProductCommand(UpdateProductCommand update, Long Id);
 
 	void deleteById(Long id);
 

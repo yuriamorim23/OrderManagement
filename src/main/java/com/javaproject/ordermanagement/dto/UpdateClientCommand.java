@@ -3,7 +3,7 @@ package com.javaproject.ordermanagement.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-public class ClientUpdateForm {
+public class UpdateClientCommand {
 	
 	@NotNull(message = "Field cannot be blank")
 	private String address;

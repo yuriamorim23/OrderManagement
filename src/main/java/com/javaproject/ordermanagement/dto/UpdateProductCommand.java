@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class ProductUpdate {
+public class UpdateProductCommand {
 
 	@NotEmpty(message="The field needs to be filled")
 	@Length(min=2, max=120, message="Must contain between 2 and 120 characters")

@@ -9,9 +9,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.javaproject.ordermanagement.dto.ClientDTO;
-import com.javaproject.ordermanagement.dto.ClientForm;
-import com.javaproject.ordermanagement.dto.ClientUpdateForm;
+import com.javaproject.ordermanagement.dto.GetClientQueryResult;
+import com.javaproject.ordermanagement.dto.CreateClientCommand;
+import com.javaproject.ordermanagement.dto.UpdateClientCommand;
 import com.javaproject.ordermanagement.entities.Client;
 import com.javaproject.ordermanagement.exception.ExceptionHandlerAdvice;
 import com.javaproject.ordermanagement.repositories.ClientRepository;
@@ -23,17 +23,17 @@ public class ClientServiceImpl implements ClientService {
 	@Autowired
 	private ClientRepository repository;
 	
-	public List<ClientDTO> findAll(){
+	public List<GetClientQueryResult> findAll(){
 		List<Client> all = repository.findAll();
 		return convertListToDto(all);	
 	}
 	
-	private static List<ClientDTO> convertListToDto(List<Client> clients){
-		return clients.stream().map(ClientDTO::new).collect(Collectors.toList());
+	private static List<GetClientQueryResult> convertListToDto(List<Client> clients){
+		return clients.stream().map(GetClientQueryResult::new).collect(Collectors.toList());
 	}
 	
 	@Transactional
-	public ClientDTO findById(Long id) {
+	public GetClientQueryResult findById(Long id) {
 		Optional<Client> optional = repository.findById(id);
 		if(optional.isPresent()) {
 			return convertToDto(optional.get());
@@ -42,14 +42,14 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	@Transactional
-	public ClientDTO createClientCommand(ClientForm form) {
+	public GetClientQueryResult createClientCommand(CreateClientCommand form) {
 		Client client = convertToBusiness(form);
 		client = repository.save(client);
 		return convertToDto(client);
 	}
 	
 	@Transactional
-	public ClientDTO UpdateClientCommand(ClientUpdateForm form, Long Id) {
+	public GetClientQueryResult UpdateClientCommand(UpdateClientCommand form, Long Id) {
 		Optional<Client> op = repository.findById(Id);
 		if(op.isPresent()) {
 			Client obj = op.get();
@@ -77,7 +77,7 @@ public class ClientServiceImpl implements ClientService {
 		}
 	}
 	
-	public Client convertToBusiness(ClientForm form) {
+	public Client convertToBusiness(CreateClientCommand form) {
 		Client client = new Client();
 		client.setFirstName(form.getFirstName());
 		client.setLastName(form.getLastName());
@@ -88,8 +88,8 @@ public class ClientServiceImpl implements ClientService {
 		return client;
 	}
 	
-	public ClientDTO convertToDto(Client client) {
-		ClientDTO dto = new ClientDTO();
+	public GetClientQueryResult convertToDto(Client client) {
+		GetClientQueryResult dto = new GetClientQueryResult();
 		dto.setId(client.getId());
 		dto.setFirstName(client.getFirstName());
 		dto.setLastName(client.getLastName());

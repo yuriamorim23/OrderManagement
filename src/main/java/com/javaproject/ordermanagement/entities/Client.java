@@ -1,6 +1,7 @@
 package com.javaproject.ordermanagement.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Client")
@@ -18,6 +21,7 @@ public class Client extends Identity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
+	@JsonIgnore
 	@Column(unique = true)
 	private String firstName;
 	private String lastName;
@@ -48,6 +52,7 @@ public class Client extends Identity implements Serializable {
 		this.id = id;
 	}
 
+	@JsonIgnore
 	public String getFirstName() {
 		return firstName;
 	}
@@ -56,6 +61,7 @@ public class Client extends Identity implements Serializable {
 		this.firstName = firstName;
 	}
 
+	@JsonIgnore
 	public String getLastName() {
 		return lastName;
 	}
@@ -64,6 +70,7 @@ public class Client extends Identity implements Serializable {
 		this.lastName = lastName;
 	}
 
+	@JsonIgnore
 	public String getAddress() {
 		return address;
 	}
@@ -72,6 +79,7 @@ public class Client extends Identity implements Serializable {
 		this.address = address;
 	}
 
+	@JsonIgnore
 	public String getPostCode() {
 		return postCode;
 	}
@@ -80,6 +88,7 @@ public class Client extends Identity implements Serializable {
 		this.postCode = postCode;
 	}
 
+	@JsonIgnore
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -88,6 +97,7 @@ public class Client extends Identity implements Serializable {
 		this.phoneNumber = phoneNumber;
 	}
 
+	@JsonIgnore
 	public String getEmail() {
 		return email;
 	}
@@ -95,5 +105,24 @@ public class Client extends Identity implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(id);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Client other = (Client) obj;
+		return Objects.equals(id, other.id);
+	}
 }

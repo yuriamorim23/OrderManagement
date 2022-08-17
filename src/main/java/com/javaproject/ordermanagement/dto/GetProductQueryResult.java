@@ -2,7 +2,7 @@ package com.javaproject.ordermanagement.dto;
 
 import com.javaproject.ordermanagement.entities.Product;
 
-public class ProductDTO {
+public class GetProductQueryResult {
 	
 	private Long id;
 	private Long code;
@@ -11,9 +11,9 @@ public class ProductDTO {
 	private Double minPrince;
 	private Integer stockQuantity;
 	
-	public ProductDTO() {}
+	public GetProductQueryResult() {}
 	
-	public ProductDTO(Product product) {
+	public GetProductQueryResult(Product product) {
 		this.setId(product.getId());
 		this.code = product.getCode();
 		this.description = product.getDescription();

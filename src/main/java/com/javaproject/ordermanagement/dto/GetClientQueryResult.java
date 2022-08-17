@@ -2,7 +2,7 @@ package com.javaproject.ordermanagement.dto;
 
 import com.javaproject.ordermanagement.entities.Client;
 
-public class ClientDTO {
+public class GetClientQueryResult {
 	
 	private Long id;
 	private String firstName;
@@ -12,9 +12,9 @@ public class ClientDTO {
 	private String phoneNumber; 
 	private String email;
 	
-	public ClientDTO() {}
+	public GetClientQueryResult() {}
 	
-	public ClientDTO(Client client) {
+	public GetClientQueryResult(Client client) {
 		this.id = client.getId();
 		this.firstName = client.getFirstName();
 		this.lastName = client.getLastName();

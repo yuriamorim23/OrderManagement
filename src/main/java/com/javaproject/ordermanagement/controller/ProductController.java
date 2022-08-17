@@ -8,19 +8,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.javaproject.ordermanagement.dto.ProductDTO;
-import com.javaproject.ordermanagement.dto.ProductSubmit;
-import com.javaproject.ordermanagement.dto.ProductUpdate;
+import com.javaproject.ordermanagement.dto.GetProductQueryResult;
+import com.javaproject.ordermanagement.dto.CreateProductCommand;
+import com.javaproject.ordermanagement.dto.UpdateProductCommand;
 
 public interface ProductController {
 
-	ResponseEntity<List<ProductDTO>> findAll();
+	ResponseEntity<List<GetProductQueryResult>> findAll();
 
-	ResponseEntity<ProductDTO> findById(@PathVariable("id") Long id);
+	ResponseEntity<GetProductQueryResult> findById(@PathVariable("id") Long id);
 	
-	ResponseEntity<ProductDTO> productRegister(@RequestBody @Valid ProductSubmit submit);
+	ResponseEntity<GetProductQueryResult> productRegister(@RequestBody @Valid CreateProductCommand createProductCommand);
 	
-	ProductDTO updateById(@RequestBody ProductUpdate update, @PathVariable("id") Long id);
+	GetProductQueryResult updateById(@RequestBody UpdateProductCommand updateProductCommand, @PathVariable("id") Long id);
 	
 	void deleteById(@PathVariable("id") Long id);
 

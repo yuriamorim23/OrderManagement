@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javaproject.ordermanagement.controller.ProductController;
-import com.javaproject.ordermanagement.dto.ProductDTO;
-import com.javaproject.ordermanagement.dto.ProductSubmit;
-import com.javaproject.ordermanagement.dto.ProductUpdate;
+import com.javaproject.ordermanagement.dto.GetProductQueryResult;
+import com.javaproject.ordermanagement.dto.CreateProductCommand;
+import com.javaproject.ordermanagement.dto.UpdateProductCommand;
 import com.javaproject.ordermanagement.service.ProductService;
 
 @RestController
@@ -30,24 +30,24 @@ public class ProductControllerImpl implements ProductController {
 	private ProductService service;
 
 	@GetMapping("/product")
-	public ResponseEntity<List<ProductDTO>> findAll() {
+	public ResponseEntity<List<GetProductQueryResult>> findAll() {
 		return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
 	}
 
 
 	@GetMapping("product/{id}")
-	public ResponseEntity<ProductDTO> findById(@PathVariable("id") Long id) {
+	public ResponseEntity<GetProductQueryResult> findById(@PathVariable("id") Long id) {
 		return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/product")
-	public ResponseEntity<ProductDTO> productRegister(@RequestBody @Valid ProductSubmit submit) {
-		return new ResponseEntity<>(service.createProductCommand(submit), HttpStatus.CREATED);
+	public ResponseEntity<GetProductQueryResult> productRegister(@RequestBody @Valid CreateProductCommand createProductCommand) {
+		return new ResponseEntity<>(service.createProductCommand(createProductCommand), HttpStatus.CREATED);
 	}
 
 	@PutMapping("product/{id}")
-	public ProductDTO updateById(@RequestBody @Valid ProductUpdate update, @PathVariable("id") Long id) {
-		return service.UpdateProductCommand(update, id);
+	public GetProductQueryResult updateById(@RequestBody @Valid UpdateProductCommand updateProductCommand, @PathVariable("id") Long id) {
+		return service.UpdateProductCommand(updateProductCommand, id);
 	}
 
 	@DeleteMapping("product/{id}")

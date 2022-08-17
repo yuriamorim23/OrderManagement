@@ -5,7 +5,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-public class ClientForm {
+public class CreateClientCommand {
 	
 	@NotEmpty(message="The field needs to be filled")
 	@Length(min=5, max=120, message="Must contain between 5 and 120 characters")
@@ -29,7 +29,7 @@ public class ClientForm {
 	@Email(message="Invalid email")
 	private String email;
 	
-	public ClientForm() {}
+	public CreateClientCommand() {}
 
 	public String getFirstName() {
 		return firstName;

@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-public class ProductSubmit {
+public class CreateProductCommand {
 
 	@NotNull(message = "Please enter a number")
 	private Long code;
@@ -27,7 +27,7 @@ public class ProductSubmit {
 	@DecimalMin(value = "0", message = "Please Enter a valid value Amount ex: 1")
 	private Integer stockQuantity;
 	
-	public ProductSubmit() {}
+	public CreateProductCommand() {}
 
 	public Long getCode() {
 		return code;

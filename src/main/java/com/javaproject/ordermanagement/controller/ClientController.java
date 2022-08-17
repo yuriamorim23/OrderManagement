@@ -8,19 +8,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.javaproject.ordermanagement.dto.ClientDTO;
-import com.javaproject.ordermanagement.dto.ClientForm;
-import com.javaproject.ordermanagement.dto.ClientUpdateForm;
+import com.javaproject.ordermanagement.dto.GetClientQueryResult;
+import com.javaproject.ordermanagement.dto.CreateClientCommand;
+import com.javaproject.ordermanagement.dto.UpdateClientCommand;
 
 public interface ClientController {
 
-	ResponseEntity<List<ClientDTO>> findAll();
+	ResponseEntity<List<GetClientQueryResult>> findAll();
 
-	ResponseEntity<ClientDTO> findById(@PathVariable("id") Long id);
+	ResponseEntity<GetClientQueryResult> findById(@PathVariable("id") Long id);
 	
-	ResponseEntity<ClientDTO> register(@RequestBody @Valid ClientForm form);
+	ResponseEntity<GetClientQueryResult> register(@RequestBody @Valid CreateClientCommand createClientCommand);
 	
-	ClientDTO updateById(@RequestBody ClientUpdateForm form, @PathVariable("id") Long id);
+	GetClientQueryResult updateById(@RequestBody UpdateClientCommand updateClientCommand, @PathVariable("id") Long id);
 	
 	void deleteById(@PathVariable("id") Long id);
 

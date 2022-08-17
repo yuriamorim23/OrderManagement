@@ -9,9 +9,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.javaproject.ordermanagement.dto.ProductDTO;
-import com.javaproject.ordermanagement.dto.ProductSubmit;
-import com.javaproject.ordermanagement.dto.ProductUpdate;
+import com.javaproject.ordermanagement.dto.GetProductQueryResult;
+import com.javaproject.ordermanagement.dto.CreateProductCommand;
+import com.javaproject.ordermanagement.dto.UpdateProductCommand;
 import com.javaproject.ordermanagement.entities.Product;
 import com.javaproject.ordermanagement.exception.MinPriceValidation;
 import com.javaproject.ordermanagement.exception.ProductNotFound;
@@ -24,17 +24,17 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductRepository repository;
 	
-	public List<ProductDTO> findAll(){
+	public List<GetProductQueryResult> findAll(){
 		List<Product> all = repository.findAll();
 		return convertListToDto(all);
 	}
 	
-	private static List<ProductDTO> convertListToDto(List<Product> products){
-		return products.stream().map(ProductDTO::new).collect(Collectors.toList());
+	private static List<GetProductQueryResult> convertListToDto(List<Product> products){
+		return products.stream().map(GetProductQueryResult::new).collect(Collectors.toList());
 	}
 
 	@Transactional
-	public ProductDTO findById(Long id) {
+	public GetProductQueryResult findById(Long id) {
 		Optional<Product> optional = repository.findById(id);
 		if(optional.isPresent()) {
 			return convertToDto(optional.get());
@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Transactional
-	public ProductDTO createProductCommand(ProductSubmit submit) {
+	public GetProductQueryResult createProductCommand(CreateProductCommand submit) {
 		Product product = convertToBusiness(submit);
 		if(submit.getMinPrince() > submit.getPrice()) {
 			throw new MinPriceValidation();
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Transactional
-	public ProductDTO UpdateProductCommand(ProductUpdate update, Long Id) {
+	public GetProductQueryResult UpdateProductCommand(UpdateProductCommand update, Long Id) {
 		Optional<Product> op = repository.findById(Id);
 		if(op.isPresent()) {
 			Product obj = op.get();
@@ -85,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 	
-	public Product convertToBusiness(ProductSubmit submit) {
+	public Product convertToBusiness(CreateProductCommand submit) {
 		Product product = new Product();
 		product.setCode(submit.getCode());
 		product.setDescription(submit.getDescription());
@@ -95,8 +95,8 @@ public class ProductServiceImpl implements ProductService {
 		return product;
 	}
 	
-	public ProductDTO convertToDto(Product product) {
-		ProductDTO dto = new ProductDTO();
+	public GetProductQueryResult convertToDto(Product product) {
+		GetProductQueryResult dto = new GetProductQueryResult();
 		dto.setId(product.getId());
 		dto.setCode(product.getCode());
 		dto.setDescription(product.getDescription());
