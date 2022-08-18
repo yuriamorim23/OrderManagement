@@ -15,9 +15,9 @@ import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
 import com.javaproject.ordermanagement.dto.UpdateOrderCommand;
 import com.javaproject.ordermanagement.entities.Order;
 import com.javaproject.ordermanagement.entities.OrderItem;
-import com.javaproject.ordermanagement.entities.Product;
 import com.javaproject.ordermanagement.exception.ProductNotFound;
 import com.javaproject.ordermanagement.repositories.ClientRepository;
+import com.javaproject.ordermanagement.repositories.OrderItemRepository;
 import com.javaproject.ordermanagement.repositories.OrderRepository;
 import com.javaproject.ordermanagement.repositories.ProductRepository;
 import com.javaproject.ordermanagement.service.OrderService;
@@ -30,9 +30,12 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private ClientRepository clientRepository;
-	
+
 	@Autowired
 	private ProductRepository productRepository;
+
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 
 	public List<GetOrderQueryResult> findAll() {
 		List<Order> all = orderRepository.findAll();
@@ -59,6 +62,22 @@ public class OrderServiceImpl implements OrderService {
 		return convertToDto(order);
 	}
 
+	public Order convertToBusiness(CreateOrderCommand createOrderCommand) {
+		Order order = new Order();
+		order.setClient(clientRepository.findById(createOrderCommand.getClient()).get());
+		order.setMoreInfo(createOrderCommand.getMoreInfo());
+		order.setStatus(createOrderCommand.getStatus());
+		order.setCloseSoldDate(new Date());
+		for (OrderItem orderItem : order.getOrderItems()) {
+			orderItem.setProduct(productRepository.findById(orderItem.getProduct()).get());
+			orderItem.setOrder(orderRepository.findById(orderItem.getOrder()).get());
+			orderItem.setPrice(orderItem.getPrice());
+			orderItem.setQuantity(orderItem.getQuantity());
+			orderItemRepository.saveAll(order.getOrderItems());
+		}
+		return order;
+	}
+
 	@Transactional
 	public void deleteById(Long id) {
 		if (orderRepository.existsById(id)) {
@@ -66,21 +85,6 @@ public class OrderServiceImpl implements OrderService {
 		} else {
 			throw new ProductNotFound();
 		}
-	}
-
-	public Order convertToBusiness(CreateOrderCommand createOrderCommand) {
-		Order order = new Order();
-		order.setClient(clientRepository.findById(createOrderCommand.getClient()).get());
-		order.setMoreInfo(createOrderCommand.getMoreInfo());
-		order.setStatus(createOrderCommand.getStatus());
-		order.setCloseSoldDate(new Date());
-		for (OrderItem orderItems : order.getOrderItems()) {
-			orderItems.setProduct(productRepository.findById(orderItems.getProduct()).get());
-			orderItems.setOrder(orderRepository.findById(orderItems.getOrder().getId()));
-			orderItems.setPrice(orderItems.getPrice());
-			orderItems.setQuantity(orderItems.getQuantity());
-		}
-		return order;
 	}
 
 	public GetOrderQueryResult convertToDto(Order order) {
