@@ -21,6 +21,10 @@ import com.javaproject.ordermanagement.repositories.OrderItemRepository;
 import com.javaproject.ordermanagement.repositories.OrderRepository;
 import com.javaproject.ordermanagement.repositories.ProductRepository;
 import com.javaproject.ordermanagement.service.OrderService;
+import com.projetojava.cursomc.domain.ItemPedido;
+import com.projetojava.cursomc.domain.PagamentoComBoleto;
+import com.projetojava.cursomc.domain.Pedido;
+import com.projetojava.cursomc.domain.enums.EstadoPagamento;
 
 @Service
 public class OrderServiceImpl implements OrderService {

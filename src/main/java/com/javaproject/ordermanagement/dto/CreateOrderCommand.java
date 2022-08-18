@@ -1,8 +1,8 @@
 package com.javaproject.ordermanagement.dto;
 
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
-import com.javaproject.ordermanagement.enums.OrderStatus;
+import javax.validation.constraints.NotNull;
 
 public class CreateOrderCommand {
 
@@ -10,9 +10,8 @@ public class CreateOrderCommand {
 	private Long Client;
 
 	private String moreInfo;
-
-	@NotNull(message = "The field needs to be filled")
-	private OrderStatus status;
+	
+	private List<CreateOrderItemCommand> orderItems;
 
 	public Long getClient() {
 		return Client;
@@ -30,12 +29,12 @@ public class CreateOrderCommand {
 		this.moreInfo = moreInfo;
 	}
 
-	public OrderStatus getStatus() {
-		return status;
+	public List<CreateOrderItemCommand> getOrderItems() {
+		return orderItems;
 	}
 
-	public void setStatus(OrderStatus status) {
-		this.status = status;
+	public void setOrderItems(List<CreateOrderItemCommand> orderItems) {
+		this.orderItems = orderItems;
 	}
-
+	
 }
