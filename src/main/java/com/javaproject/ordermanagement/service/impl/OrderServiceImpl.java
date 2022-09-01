@@ -21,10 +21,6 @@ import com.javaproject.ordermanagement.repositories.OrderItemRepository;
 import com.javaproject.ordermanagement.repositories.OrderRepository;
 import com.javaproject.ordermanagement.repositories.ProductRepository;
 import com.javaproject.ordermanagement.service.OrderService;
-import com.projetojava.cursomc.domain.ItemPedido;
-import com.projetojava.cursomc.domain.PagamentoComBoleto;
-import com.projetojava.cursomc.domain.Pedido;
-import com.projetojava.cursomc.domain.enums.EstadoPagamento;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -34,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private ClientRepository clientRepository;
-
+	
 	@Autowired
 	private ProductRepository productRepository;
 
@@ -70,15 +66,14 @@ public class OrderServiceImpl implements OrderService {
 		Order order = new Order();
 		order.setClient(clientRepository.findById(createOrderCommand.getClient()).get());
 		order.setMoreInfo(createOrderCommand.getMoreInfo());
-		order.setStatus(createOrderCommand.getStatus());
-		order.setCloseSoldDate(new Date());
+		order = orderRepository.save(order);
 		for (OrderItem orderItem : order.getOrderItems()) {
-			orderItem.setProduct(productRepository.findById(orderItem.getProduct()).get());
-			orderItem.setOrder(orderRepository.findById(orderItem.getOrder()).get());
+			orderItem.setProduct(productRepository.findById(orderItem.getProduct().getId()));
 			orderItem.setPrice(orderItem.getPrice());
 			orderItem.setQuantity(orderItem.getQuantity());
-			orderItemRepository.saveAll(order.getOrderItems());
+			
 		}
+		orderItemRepository.saveAll(order.getOrderItems());
 		return order;
 	}
 
@@ -104,18 +99,4 @@ public class OrderServiceImpl implements OrderService {
 	public GetOrderQueryResult updateOrder(UpdateOrderCommand updateOrderCommand, Long Id) {
 		return null;
 	}
-
 }
-
-/*
- * @Transactional public ProductDTO updateOrderCommand(ProductUpdate update,
- * Long Id) { Optional<Product> op = repository.findById(Id); if(op.isPresent())
- * { Product obj = op.get(); if(update.getDescription() != null &&
- * update.getMinPrince() != null && update.getPrice() != null &&
- * update.getStockQuantity() != null) { if(update.getMinPrince() >
- * update.getPrice()) { throw new MinPriceValidation(); }
- * obj.setDescription(update.getDescription());
- * obj.setMinPrince(update.getMinPrince()); obj.setPrice(update.getPrice());
- * obj.setStockQuantity(update.getStockQuantity()); } repository.save(obj);
- * return convertToDto(obj); } return null; }
- */
