@@ -2,26 +2,25 @@ package com.javaproject.ordermanagement.dto;
 
 import javax.validation.constraints.NotNull;
 
-import com.javaproject.ordermanagement.entities.Product;
-
 public class CreateOrderItemCommand {
 
 	@NotNull
-	private Product productId;
-	
+	private Long productId;
+
 	@NotNull
 	private Double price;
-	
+
 	@NotNull
 	private Double quantity;
-	
-	public CreateOrderItemCommand () {}
 
-	public Product getProductId() {
+	public CreateOrderItemCommand() {
+	}
+
+	public Long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(Product productId) {
+	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
 
@@ -40,4 +39,5 @@ public class CreateOrderItemCommand {
 	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
+
 }

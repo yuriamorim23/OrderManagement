@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.javaproject.ordermanagement.dto.CreateOrderCommand;
+import com.javaproject.ordermanagement.dto.CreateOrderItemCommand;
 import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
 import com.javaproject.ordermanagement.dto.UpdateOrderCommand;
 import com.javaproject.ordermanagement.entities.Order;
@@ -27,12 +28,12 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderRepository orderRepository;
-
-	@Autowired
-	private ClientRepository clientRepository;
 	
 	@Autowired
 	private ProductRepository productRepository;
+
+	@Autowired
+	private ClientRepository clientRepository;
 
 	@Autowired
 	private OrderItemRepository orderItemRepository;
@@ -59,21 +60,20 @@ public class OrderServiceImpl implements OrderService {
 	public GetOrderQueryResult createOrder(CreateOrderCommand createOrderCommand) {
 		Order order = convertToBusiness(createOrderCommand);
 		order = orderRepository.save(order);
+		for (OrderItem orderItem : order.getOrderItems()) {
+			orderItem.setProduct(productRepository.findById(productId);
+			orderItem.setOrder(order);
+			orderItem.setPrice(orderItem.getPrice());
+			orderItem.setQuantity(orderItem.getQuantity());
+		}
+		orderItemRepository.saveAll(order.getOrderItems());
 		return convertToDto(order);
 	}
 
 	public Order convertToBusiness(CreateOrderCommand createOrderCommand) {
 		Order order = new Order();
-		order.setClient(clientRepository.findById(createOrderCommand.getClient()).get());
+		order.setClient(clientRepository.findById(createOrderCommand.getClientId()).get());
 		order.setMoreInfo(createOrderCommand.getMoreInfo());
-		order = orderRepository.save(order);
-		for (OrderItem orderItem : order.getOrderItems()) {
-			orderItem.setProduct(productRepository.findById(orderItem.getProduct().getId()));
-			orderItem.setPrice(orderItem.getPrice());
-			orderItem.setQuantity(orderItem.getQuantity());
-			
-		}
-		orderItemRepository.saveAll(order.getOrderItems());
 		return order;
 	}
 
