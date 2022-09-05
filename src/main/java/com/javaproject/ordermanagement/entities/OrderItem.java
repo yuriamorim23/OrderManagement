@@ -3,7 +3,6 @@ package com.javaproject.ordermanagement.entities;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +15,7 @@ public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
@@ -27,7 +26,6 @@ public class OrderItem implements Serializable {
 	@JoinColumn(name = "product_id")
 	private Product product;
 
-	@Column(unique = true)
 	private Double price;
 	private Double quantity;
 
@@ -36,6 +34,13 @@ public class OrderItem implements Serializable {
 	public OrderItem(Long id, Order order, Product product, Double price, Double quantity) {
 		super();
 		this.id = id;
+		this.order = order;
+		this.product = product;
+		this.price = price;
+		this.quantity = quantity;
+	}
+	
+	public OrderItem(Order order, Product product, Double price, Double quantity) {
 		this.order = order;
 		this.product = product;
 		this.price = price;

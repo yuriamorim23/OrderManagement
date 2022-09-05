@@ -7,18 +7,18 @@ import javax.validation.constraints.NotNull;
 public class CreateOrderCommand {
 
 	@NotNull
-	private Long ClientId;
+	private Long clientId;
 
 	private String moreInfo;
 
 	private List<CreateOrderItemCommand> orderItems;
 
 	public Long getClientId() {
-		return ClientId;
+		return clientId;
 	}
 
 	public void setClientId(Long clientId) {
-		ClientId = clientId;
+		this.clientId = clientId;
 	}
 
 	public String getMoreInfo() {

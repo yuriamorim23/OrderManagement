@@ -1,5 +1,6 @@
 package com.javaproject.ordermanagement.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,8 @@ import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
 import com.javaproject.ordermanagement.dto.UpdateOrderCommand;
 import com.javaproject.ordermanagement.entities.Order;
 import com.javaproject.ordermanagement.entities.OrderItem;
+import com.javaproject.ordermanagement.entities.Product;
+import com.javaproject.ordermanagement.enums.OrderStatus;
 import com.javaproject.ordermanagement.exception.ProductNotFound;
 import com.javaproject.ordermanagement.repositories.ClientRepository;
 import com.javaproject.ordermanagement.repositories.OrderItemRepository;
@@ -28,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderRepository orderRepository;
-	
+
 	@Autowired
 	private ProductRepository productRepository;
 
@@ -59,21 +62,39 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public GetOrderQueryResult createOrder(CreateOrderCommand createOrderCommand) {
 		Order order = convertToBusiness(createOrderCommand);
-		order = orderRepository.save(order);
-		for (OrderItem orderItem : order.getOrderItems()) {
-			orderItem.setProduct(productRepository.findById(productId);
-			orderItem.setOrder(order);
-			orderItem.setPrice(orderItem.getPrice());
-			orderItem.setQuantity(orderItem.getQuantity());
-		}
-		orderItemRepository.saveAll(order.getOrderItems());
+		var savedOrder = orderRepository.save(order);
+		
+		List<OrderItem> orderItemsDomain = new ArrayList<OrderItem>();
+		var orderItems = createOrderCommand.getOrderItems();
+		//orderItems.forEach(item -> {
+		createOrderCommand.getOrderItems().forEach(item -> {
+			Product product = productRepository.findById(item.getProductId()).get();
+			var orderItem = new OrderItem(order, product, item.getQuantity(), item.getPrice());
+			orderItemsDomain.add(orderItem);
+			//orderItemsDomain.add(new OrderItem(order, product, item.getQuantity(), item.getPrice()));
+		});
+		//orderItemsDomain.remove(0);
+		orderItemRepository.saveAll(orderItemsDomain);
+		
+		//var primeiroProduto = orderItems.get(0);
+				
 		return convertToDto(order);
 	}
 
 	public Order convertToBusiness(CreateOrderCommand createOrderCommand) {
-		Order order = new Order();
-		order.setClient(clientRepository.findById(createOrderCommand.getClientId()).get());
+		var order = new Order();
+		var client = clientRepository.findById(createOrderCommand.getClientId()).get();
+		order.setClient(client);
 		order.setMoreInfo(createOrderCommand.getMoreInfo());
+		order.setStatus(OrderStatus.OPEN);
+		order.setCloseSoldDate(new Date());
+		
+		/*for (OrderItem orderItem : createOrderCommand.getOrderItems()) {
+			orderItem.setProduct(productRepository.findById(orderItem.getProduct().getId()).get());
+			orderItem.setOrder(order);
+			orderItem.setPrice(orderItem.getPrice());
+			orderItem.setQuantity(orderItem.getQuantity());
+		}*/
 		return order;
 	}
 
