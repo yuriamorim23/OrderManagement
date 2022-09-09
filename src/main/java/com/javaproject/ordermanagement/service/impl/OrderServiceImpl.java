@@ -47,9 +47,10 @@ public class OrderServiceImpl implements OrderService {
 			orderList.add(new GetOrderQueryResult(
 					item.getClient().getId(),
 					item.getId(),
+					item.getClientName(),
 					item.getMoreInfo(),
-					item.getStatus()
-					));
+					item.getStatus(),
+					item.getTotal()));
 		});
 		
 		return orderList;
@@ -86,6 +87,8 @@ public class OrderServiceImpl implements OrderService {
 		order.setMoreInfo(createOrderCommand.getMoreInfo());
 		order.setStatus(OrderStatus.OPEN);
 		order.setCloseSoldDate(new Date());
+		order.setClientName(String.valueOf(order.getClient().getFirstName()));
+		order.setTotal(createOrderCommand.getValorTotal());
 		return order;
 	}
 
@@ -96,6 +99,8 @@ public class OrderServiceImpl implements OrderService {
 		dto.setOrderId(order.getId());
 		dto.setMoreInfo(order.getMoreInfo());
 		dto.setStatus(order.getStatus());
+		dto.setClientName(order.getClient().getFirstName());
+		dto.setTotal(order.getTotal());
 		return dto;
 	}
 

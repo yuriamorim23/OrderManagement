@@ -6,17 +6,22 @@ public class GetOrderQueryResult {
 
 	private Long clientId;
 	private Long orderId;
+	private String clientName;
 	private String moreInfo;
 	private OrderStatus status;
+	private Double total;
 	
 	public GetOrderQueryResult() {}
 
-	public GetOrderQueryResult(Long clientId, Long orderId, String moreInfo, OrderStatus status) {
+	public GetOrderQueryResult(Long clientId, Long orderId, String clientName, String moreInfo, OrderStatus status,
+			Double total) {
 		super();
 		this.clientId = clientId;
 		this.orderId = orderId;
+		this.clientName = clientName;
 		this.moreInfo = moreInfo;
 		this.status = status;
+		this.total = total;
 	}
 
 	public Long getClientId() {
@@ -35,6 +40,14 @@ public class GetOrderQueryResult {
 		this.orderId = orderId;
 	}
 
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
 	public String getMoreInfo() {
 		return moreInfo;
 	}
@@ -51,7 +64,12 @@ public class GetOrderQueryResult {
 		this.status = status;
 	}
 
-	
-	
+	public Double getTotal() {
+		return total;
+	}
+
+	public void setTotal(Double total) {
+		this.total = total;
+	}
 	
 }

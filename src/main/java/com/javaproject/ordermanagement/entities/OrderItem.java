@@ -86,5 +86,4 @@ public class OrderItem implements Serializable {
 	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
-
 }

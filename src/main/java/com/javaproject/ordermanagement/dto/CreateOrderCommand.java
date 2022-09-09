@@ -8,6 +8,8 @@ public class CreateOrderCommand {
 
 	@NotNull
 	private Long clientId;
+	
+	private String clientName;
 
 	private String moreInfo;
 
@@ -35,6 +37,22 @@ public class CreateOrderCommand {
 
 	public void setOrderItems(List<CreateOrderItemCommand> orderItems) {
 		this.orderItems = orderItems;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+	
+	public double getValorTotal() {
+		double soma = 0.0;
+		for (CreateOrderItemCommand ip : orderItems) {
+			soma = soma + ip.getOrderTotal();
+		}
+		return soma;
 	}
 
 }

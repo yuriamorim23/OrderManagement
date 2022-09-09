@@ -31,8 +31,12 @@ public class Order implements Serializable {
 	@JoinColumn(name = "client_id")
 	private Client client;
 
+	private String clientName;
+
 	private String moreInfo;
 	private OrderStatus status;
+
+	private Double total;
 
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date closeSoldDate;
@@ -43,13 +47,15 @@ public class Order implements Serializable {
 	public Order() {
 	}
 
-	public Order(Long id, Client client, String moreInfo, OrderStatus status, Date closeSoldDate,
-			List<OrderItem> orderItems) {
+	public Order(Long id, Client client, String clientName, String moreInfo, OrderStatus status, Double total,
+			Date closeSoldDate, List<OrderItem> orderItems) {
 		super();
 		this.id = id;
 		this.client = client;
+		this.clientName = clientName;
 		this.moreInfo = moreInfo;
 		this.status = status;
+		this.total = total;
 		this.closeSoldDate = closeSoldDate;
 		this.orderItems = orderItems;
 	}
@@ -70,6 +76,14 @@ public class Order implements Serializable {
 		this.client = client;
 	}
 
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
 	public String getMoreInfo() {
 		return moreInfo;
 	}
@@ -84,6 +98,14 @@ public class Order implements Serializable {
 
 	public void setStatus(OrderStatus status) {
 		this.status = status;
+	}
+
+	public Double getTotal() {
+		return total;
+	}
+
+	public void setTotal(Double total) {
+		this.total = total;
 	}
 
 	public Date getCloseSoldDate() {
