@@ -1,36 +1,38 @@
 package com.javaproject.ordermanagement.dto;
 
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.javaproject.ordermanagement.entities.Client;
-import com.javaproject.ordermanagement.entities.Order;
 import com.javaproject.ordermanagement.enums.OrderStatus;
 
 public class GetOrderQueryResult {
 
-	private Client Client;
+	private Long clientId;
+	private Long orderId;
 	private String moreInfo;
 	private OrderStatus status;
-	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
-	private Date closeSoldDate;
+	
+	public GetOrderQueryResult() {}
 
-	public GetOrderQueryResult() {
+	public GetOrderQueryResult(Long clientId, Long orderId, String moreInfo, OrderStatus status) {
+		super();
+		this.clientId = clientId;
+		this.orderId = orderId;
+		this.moreInfo = moreInfo;
+		this.status = status;
 	}
 
-	public GetOrderQueryResult(Order order) {
-		this.Client = order.getClient();
-		this.moreInfo = order.getMoreInfo();
-		this.status = order.getStatus();
-		this.closeSoldDate = order.getCloseSoldDate();
+	public Long getClientId() {
+		return clientId;
 	}
 
-	public Client getClient() {
-		return Client;
+	public void setClientId(Long clientId) {
+		this.clientId = clientId;
 	}
 
-	public void setClient(Client client) {
-		Client = client;
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
 
 	public String getMoreInfo() {
@@ -49,13 +51,7 @@ public class GetOrderQueryResult {
 		this.status = status;
 	}
 
-	public Date getCloseSoldDate() {
-		return closeSoldDate;
-	}
-
-	public void setCloseSoldDate(Date closeSoldDate) {
-		this.closeSoldDate = closeSoldDate;
-	}
-
+	
+	
 	
 }

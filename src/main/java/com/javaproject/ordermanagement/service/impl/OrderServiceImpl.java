@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -17,7 +16,6 @@ import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
 import com.javaproject.ordermanagement.dto.UpdateOrderCommand;
 import com.javaproject.ordermanagement.entities.Order;
 import com.javaproject.ordermanagement.entities.OrderItem;
-import com.javaproject.ordermanagement.entities.Product;
 import com.javaproject.ordermanagement.enums.OrderStatus;
 import com.javaproject.ordermanagement.exception.ProductNotFound;
 import com.javaproject.ordermanagement.repositories.ClientRepository;
@@ -42,13 +40,22 @@ public class OrderServiceImpl implements OrderService {
 	private OrderItemRepository orderItemRepository;
 
 	public List<GetOrderQueryResult> findAll() {
-		List<Order> all = orderRepository.findAll();
-		return convertListToDto(all);
+		List<Order> dataBaseOrder = orderRepository.findAll();
+		List<GetOrderQueryResult> orderList = new ArrayList<GetOrderQueryResult>();
+		
+		dataBaseOrder.forEach(item ->{
+			orderList.add(new GetOrderQueryResult(
+					item.getClient().getId(),
+					item.getId(),
+					item.getMoreInfo(),
+					item.getStatus()
+					));
+		});
+		
+		return orderList;
 	}
 
-	private static List<GetOrderQueryResult> convertListToDto(List<Order> order) {
-		return order.stream().map(GetOrderQueryResult::new).collect(Collectors.toList());
-	}
+	
 
 	@Transactional
 	public GetOrderQueryResult findById(Long id) {
@@ -62,40 +69,39 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public GetOrderQueryResult createOrder(CreateOrderCommand createOrderCommand) {
 		Order order = convertToBusiness(createOrderCommand);
-		var savedOrder = orderRepository.save(order);
-		
-		List<OrderItem> orderItemsDomain = new ArrayList<OrderItem>();
-		var orderItems = createOrderCommand.getOrderItems();
-		//orderItems.forEach(item -> {
-		createOrderCommand.getOrderItems().forEach(item -> {
-			Product product = productRepository.findById(item.getProductId()).get();
-			var orderItem = new OrderItem(order, product, item.getQuantity(), item.getPrice());
-			orderItemsDomain.add(orderItem);
-			//orderItemsDomain.add(new OrderItem(order, product, item.getQuantity(), item.getPrice()));
-		});
-		//orderItemsDomain.remove(0);
-		orderItemRepository.saveAll(orderItemsDomain);
-		
-		//var primeiroProduto = orderItems.get(0);
-				
+		orderRepository.save(order);
+		List<OrderItem> orderItemsList = new ArrayList<OrderItem>();
+		for(CreateOrderItemCommand orderItemCommand : createOrderCommand.getOrderItems()) {
+			var product = productRepository.findById(orderItemCommand.getProductId()).get();
+			var orderItem = new OrderItem(order, product, orderItemCommand.getPrice(), orderItemCommand.getQuantity());
+			orderItemsList.add(orderItem);
+		}   
+		orderItemRepository.saveAll(orderItemsList);
 		return convertToDto(order);
 	}
 
 	public Order convertToBusiness(CreateOrderCommand createOrderCommand) {
-		var order = new Order();
-		var client = clientRepository.findById(createOrderCommand.getClientId()).get();
-		order.setClient(client);
+		Order order = new Order();
+		order.setClient(clientRepository.findById(createOrderCommand.getClientId()).get());
 		order.setMoreInfo(createOrderCommand.getMoreInfo());
 		order.setStatus(OrderStatus.OPEN);
 		order.setCloseSoldDate(new Date());
-		
-		/*for (OrderItem orderItem : createOrderCommand.getOrderItems()) {
-			orderItem.setProduct(productRepository.findById(orderItem.getProduct().getId()).get());
-			orderItem.setOrder(order);
-			orderItem.setPrice(orderItem.getPrice());
-			orderItem.setQuantity(orderItem.getQuantity());
-		}*/
 		return order;
+	}
+
+
+	public GetOrderQueryResult convertToDto(Order order) {
+		GetOrderQueryResult dto = new GetOrderQueryResult();
+		dto.setClientId(order.getClient().getId());
+		dto.setOrderId(order.getId());
+		dto.setMoreInfo(order.getMoreInfo());
+		dto.setStatus(order.getStatus());
+		return dto;
+	}
+
+	@Override
+	public GetOrderQueryResult updateOrder(UpdateOrderCommand updateOrderCommand, Long Id) {
+		return null;
 	}
 
 	@Transactional
@@ -105,19 +111,5 @@ public class OrderServiceImpl implements OrderService {
 		} else {
 			throw new ProductNotFound();
 		}
-	}
-
-	public GetOrderQueryResult convertToDto(Order order) {
-		GetOrderQueryResult dto = new GetOrderQueryResult();
-		dto.setClient(order.getClient());
-		dto.setMoreInfo(order.getMoreInfo());
-		dto.setStatus(order.getStatus());
-		dto.setCloseSoldDate(new Date());
-		return dto;
-	}
-
-	@Override
-	public GetOrderQueryResult updateOrder(UpdateOrderCommand updateOrderCommand, Long Id) {
-		return null;
 	}
 }
