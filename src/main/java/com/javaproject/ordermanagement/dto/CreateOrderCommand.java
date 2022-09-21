@@ -47,10 +47,10 @@ public class CreateOrderCommand {
 		this.clientName = clientName;
 	}
 	
-	public double getValorTotal() {
+	public double getTotal() {
 		double soma = 0.0;
-		for (CreateOrderItemCommand ip : orderItems) {
-			soma = soma + ip.getOrderTotal();
+		for (CreateOrderItemCommand orderCommand : orderItems) {
+			soma = soma + orderCommand.getTotal();
 		}
 		return soma;
 	}

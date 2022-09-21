@@ -17,5 +17,7 @@ public interface OrderService {
 	GetOrderQueryResult updateOrder(UpdateOrderCommand updateOrderCommand, Long Id);
 
 	void deleteById(Long id);
+	
+	GetOrderQueryResult changeOrderStatus(UpdateOrderCommand updateOrderCommand, Long id);
 
 }

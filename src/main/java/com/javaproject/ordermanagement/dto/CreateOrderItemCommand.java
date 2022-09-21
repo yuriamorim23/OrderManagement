@@ -40,7 +40,7 @@ public class CreateOrderItemCommand {
 		this.quantity = quantity;
 	}
 
-	public double getOrderTotal() {
+	public double getTotal() {
 		return price * quantity;
 	}
 

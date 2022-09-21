@@ -42,21 +42,13 @@ public class OrderServiceImpl implements OrderService {
 	public List<GetOrderQueryResult> findAll() {
 		List<Order> dataBaseOrder = orderRepository.findAll();
 		List<GetOrderQueryResult> orderList = new ArrayList<GetOrderQueryResult>();
-		
-		dataBaseOrder.forEach(item ->{
-			orderList.add(new GetOrderQueryResult(
-					item.getClient().getId(),
-					item.getId(),
-					item.getClientName(),
-					item.getMoreInfo(),
-					item.getStatus(),
-					item.getTotal()));
+
+		dataBaseOrder.forEach(item -> {
+			orderList.add(new GetOrderQueryResult(item.getClient().getId(), item.getId(), item.getClientName(),
+					item.getMoreInfo(), item.getStatus(), item.getTotal()));
 		});
-		
 		return orderList;
 	}
-
-	
 
 	@Transactional
 	public GetOrderQueryResult findById(Long id) {
@@ -72,11 +64,11 @@ public class OrderServiceImpl implements OrderService {
 		Order order = convertToBusiness(createOrderCommand);
 		orderRepository.save(order);
 		List<OrderItem> orderItemsList = new ArrayList<OrderItem>();
-		for(CreateOrderItemCommand orderItemCommand : createOrderCommand.getOrderItems()) {
+		for (CreateOrderItemCommand orderItemCommand : createOrderCommand.getOrderItems()) {
 			var product = productRepository.findById(orderItemCommand.getProductId()).get();
 			var orderItem = new OrderItem(order, product, orderItemCommand.getPrice(), orderItemCommand.getQuantity());
 			orderItemsList.add(orderItem);
-		}   
+		}
 		orderItemRepository.saveAll(orderItemsList);
 		return convertToDto(order);
 	}
@@ -88,10 +80,9 @@ public class OrderServiceImpl implements OrderService {
 		order.setStatus(OrderStatus.OPEN);
 		order.setCloseSoldDate(new Date());
 		order.setClientName(String.valueOf(order.getClient().getFirstName()));
-		order.setTotal(createOrderCommand.getValorTotal());
+		order.setTotal(createOrderCommand.getTotal());
 		return order;
 	}
-
 
 	public GetOrderQueryResult convertToDto(Order order) {
 		GetOrderQueryResult dto = new GetOrderQueryResult();
@@ -108,6 +99,7 @@ public class OrderServiceImpl implements OrderService {
 	public GetOrderQueryResult updateOrder(UpdateOrderCommand updateOrderCommand, Long Id) {
 		return null;
 	}
+	
 
 	@Transactional
 	public void deleteById(Long id) {
@@ -116,5 +108,19 @@ public class OrderServiceImpl implements OrderService {
 		} else {
 			throw new ProductNotFound();
 		}
+	}
+
+	@Transactional
+	public GetOrderQueryResult changeOrderStatus(UpdateOrderCommand updateOrderCommand, Long id) {
+		Optional<Order> order = orderRepository.findById(id);
+		if(order.isPresent()) {
+			Order od = order.get();
+			if(updateOrderCommand.getStatus() != null) {
+				od.setStatus(OrderStatus.CLOSED);
+			}
+			orderRepository.save(od);
+		}
+		return null;
+		
 	}
 }
