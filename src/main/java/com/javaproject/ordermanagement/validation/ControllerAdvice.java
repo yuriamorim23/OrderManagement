@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.javaproject.ordermanagement.exception.ExceptionHandlerAdvice;
 import com.javaproject.ordermanagement.exception.MinPriceValidation;
 import com.javaproject.ordermanagement.exception.ProductNotFound;
+import com.javaproject.ordermanagement.exception.StatusException;
 
 @RestControllerAdvice
 public class ControllerAdvice {
@@ -31,6 +32,13 @@ public class ControllerAdvice {
 	@ExceptionHandler(ProductNotFound.class)
 	public ResponseEntity<MessageExceptionHandler> findProductById(ProductNotFound exception){
 		MessageExceptionHandler error = new MessageExceptionHandler(new Date(), HttpStatus.NOT_FOUND.value(), "Product not found!");
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+		
+	}
+	
+	@ExceptionHandler(StatusException.class)
+	public ResponseEntity<MessageExceptionHandler> statusException(StatusException exception){
+		MessageExceptionHandler error = new MessageExceptionHandler(new Date(), HttpStatus.NOT_FOUND.value(), "Parameter Error!");
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 		
 	}

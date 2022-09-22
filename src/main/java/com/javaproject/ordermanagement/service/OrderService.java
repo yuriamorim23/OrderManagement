@@ -18,6 +18,8 @@ public interface OrderService {
 
 	void deleteById(Long id);
 	
-	GetOrderQueryResult changeOrderStatus(UpdateOrderCommand updateOrderCommand, Long id);
-
+	GetOrderQueryResult changeOrderStatusClosed(UpdateOrderCommand updateOrderCommand, Long id);
+	
+	GetOrderQueryResult changeOrderStatusSold(UpdateOrderCommand updateOrderCommand, Long id);
+	
 }

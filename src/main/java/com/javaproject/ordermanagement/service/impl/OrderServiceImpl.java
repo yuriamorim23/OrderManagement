@@ -18,6 +18,7 @@ import com.javaproject.ordermanagement.entities.Order;
 import com.javaproject.ordermanagement.entities.OrderItem;
 import com.javaproject.ordermanagement.enums.OrderStatus;
 import com.javaproject.ordermanagement.exception.ProductNotFound;
+import com.javaproject.ordermanagement.exception.StatusException;
 import com.javaproject.ordermanagement.repositories.ClientRepository;
 import com.javaproject.ordermanagement.repositories.OrderItemRepository;
 import com.javaproject.ordermanagement.repositories.OrderRepository;
@@ -95,7 +96,6 @@ public class OrderServiceImpl implements OrderService {
 		return dto;
 	}
 
-	@Override
 	public GetOrderQueryResult updateOrder(UpdateOrderCommand updateOrderCommand, Long Id) {
 		return null;
 	}
@@ -111,16 +111,33 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Transactional
-	public GetOrderQueryResult changeOrderStatus(UpdateOrderCommand updateOrderCommand, Long id) {
+	public GetOrderQueryResult changeOrderStatusClosed(UpdateOrderCommand updateOrderCommand, Long id) {
 		Optional<Order> order = orderRepository.findById(id);
 		if(order.isPresent()) {
 			Order od = order.get();
-			if(updateOrderCommand.getStatus() != null) {
+			if(updateOrderCommand.getStatus() == OrderStatus.CLOSED) {
 				od.setStatus(OrderStatus.CLOSED);
+			}else {
+				throw new StatusException();
 			}
 			orderRepository.save(od);
 		}
 		return null;
-		
 	}
+	
+	@Transactional
+	public GetOrderQueryResult changeOrderStatusSold(UpdateOrderCommand updateOrderCommand, Long id) {
+		Optional<Order> order = orderRepository.findById(id);
+		if(order.isPresent()) {
+			Order od = order.get();
+			if(updateOrderCommand.getStatus() == OrderStatus.SOLD) {
+				od.setStatus(OrderStatus.SOLD);
+			}else {
+				throw new StatusException();
+			}
+			orderRepository.save(od);
+		}
+		return null;
+	}
+	
 }

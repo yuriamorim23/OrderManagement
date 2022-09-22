@@ -20,7 +20,9 @@ public interface OrderController {
 	
 	ResponseEntity<GetOrderQueryResult> orderCreate(@RequestBody @Valid CreateOrderCommand createOrderCommand);
 	
-	ResponseEntity<GetOrderQueryResult> orderUpdate(@RequestBody UpdateOrderCommand updateOrderCommand, @PathVariable("id") Long id);
+	ResponseEntity<GetOrderQueryResult> orderUpdateStatusClosed(@RequestBody UpdateOrderCommand updateOrderCommand, @PathVariable("id") Long id);
+	
+	ResponseEntity<GetOrderQueryResult> orderUpdateStatusSold(@RequestBody UpdateOrderCommand updateOrderCommand, @PathVariable("id") Long id);
 	
 	void deleteById(@PathVariable("id") Long id);
 	

@@ -49,8 +49,13 @@ public class OrderControllerImpl implements OrderController {
 	}
 	
 	@PutMapping("/close/{id}")
-	public ResponseEntity<GetOrderQueryResult> orderUpdate(@RequestBody @Valid UpdateOrderCommand updateOrderCommand, @PathVariable("id") Long id) {
-		return new ResponseEntity<>(service.changeOrderStatus(updateOrderCommand, id), HttpStatus.NO_CONTENT);
+	public ResponseEntity<GetOrderQueryResult> orderUpdateStatusClosed(@RequestBody @Valid UpdateOrderCommand updateOrderCommand, @PathVariable("id") Long id) {
+		return new ResponseEntity<>(service.changeOrderStatusClosed(updateOrderCommand, id), HttpStatus.NO_CONTENT);
 	}
 	
+	@PutMapping("/sold/{id}")
+	public ResponseEntity<GetOrderQueryResult> orderUpdateStatusSold(@RequestBody @Valid UpdateOrderCommand updateOrderCommand, @PathVariable("id") Long id) {
+		return new ResponseEntity<>(service.changeOrderStatusSold(updateOrderCommand, id), HttpStatus.NO_CONTENT);
+	}
+
 }
