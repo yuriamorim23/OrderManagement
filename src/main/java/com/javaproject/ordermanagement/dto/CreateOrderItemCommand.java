@@ -11,7 +11,7 @@ public class CreateOrderItemCommand {
 	private Double price;
 
 	@NotNull
-	private Double quantity;
+	private Integer quantity;
 
 	public CreateOrderItemCommand() {
 	}
@@ -32,11 +32,11 @@ public class CreateOrderItemCommand {
 		this.price = price;
 	}
 
-	public Double getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Double quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 

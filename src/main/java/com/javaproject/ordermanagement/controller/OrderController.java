@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.javaproject.ordermanagement.dto.BaseApiResult;
 import com.javaproject.ordermanagement.dto.CreateOrderCommand;
 import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
-import com.javaproject.ordermanagement.dto.UpdateOrderCommand;
 
 public interface OrderController {
 
@@ -18,11 +18,11 @@ public interface OrderController {
 
 	ResponseEntity<GetOrderQueryResult> findById(@PathVariable("id") Long id);
 	
-	ResponseEntity<GetOrderQueryResult> orderCreate(@RequestBody @Valid CreateOrderCommand createOrderCommand);
+	ResponseEntity<BaseApiResult> orderCreate(@RequestBody @Valid CreateOrderCommand createOrderCommand);
 	
-	ResponseEntity<GetOrderQueryResult> orderUpdateStatusClosed(@RequestBody UpdateOrderCommand updateOrderCommand, @PathVariable("id") Long id);
+	ResponseEntity<BaseApiResult> orderUpdateStatusClosed(@PathVariable("id") Long id);
 	
-	ResponseEntity<GetOrderQueryResult> orderUpdateStatusSold(@RequestBody UpdateOrderCommand updateOrderCommand, @PathVariable("id") Long id);
+	ResponseEntity<BaseApiResult> orderUpdateStatusSold(@PathVariable("id") Long id);
 	
 	void deleteById(@PathVariable("id") Long id);
 	

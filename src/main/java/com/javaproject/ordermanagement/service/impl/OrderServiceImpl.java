@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.javaproject.ordermanagement.dto.BaseApiResult;
 import com.javaproject.ordermanagement.dto.CreateOrderCommand;
 import com.javaproject.ordermanagement.dto.CreateOrderItemCommand;
 import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
@@ -18,7 +19,6 @@ import com.javaproject.ordermanagement.entities.Order;
 import com.javaproject.ordermanagement.entities.OrderItem;
 import com.javaproject.ordermanagement.enums.OrderStatus;
 import com.javaproject.ordermanagement.exception.ProductNotFound;
-import com.javaproject.ordermanagement.exception.StatusException;
 import com.javaproject.ordermanagement.repositories.ClientRepository;
 import com.javaproject.ordermanagement.repositories.OrderItemRepository;
 import com.javaproject.ordermanagement.repositories.OrderRepository;
@@ -27,7 +27,9 @@ import com.javaproject.ordermanagement.service.OrderService;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-
+	
+	BaseApiResult result;
+	
 	@Autowired
 	private OrderRepository orderRepository;
 
@@ -61,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Transactional
-	public GetOrderQueryResult createOrder(CreateOrderCommand createOrderCommand) {
+	public BaseApiResult createOrder(CreateOrderCommand createOrderCommand) {
 		Order order = convertToBusiness(createOrderCommand);
 		orderRepository.save(order);
 		List<OrderItem> orderItemsList = new ArrayList<OrderItem>();
@@ -71,7 +73,8 @@ public class OrderServiceImpl implements OrderService {
 			orderItemsList.add(orderItem);
 		}
 		orderItemRepository.saveAll(orderItemsList);
-		return convertToDto(order);
+		var result = new BaseApiResult(true, "Order " + order.getId() + " created with success!");
+		return result;
 	}
 
 	public Order convertToBusiness(CreateOrderCommand createOrderCommand) {
@@ -111,33 +114,45 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Transactional
-	public GetOrderQueryResult changeOrderStatusClosed(UpdateOrderCommand updateOrderCommand, Long id) {
-		Optional<Order> order = orderRepository.findById(id);
-		if(order.isPresent()) {
-			Order od = order.get();
-			if(updateOrderCommand.getStatus() == OrderStatus.CLOSED) {
-				od.setStatus(OrderStatus.CLOSED);
-			}else {
-				throw new StatusException();
-			}
-			orderRepository.save(od);
-		}
-		return null;
+	public BaseApiResult changeOrderStatusClosed(Long id) {
+		Order order = orderRepository.findById(id).get();
+		order.setStatus(OrderStatus.CLOSED);
+		orderRepository.save(order);
+		var result = new BaseApiResult(true, "Order closed with success!");
+		return result;
 	}
 	
 	@Transactional
-	public GetOrderQueryResult changeOrderStatusSold(UpdateOrderCommand updateOrderCommand, Long id) {
-		Optional<Order> order = orderRepository.findById(id);
-		if(order.isPresent()) {
-			Order od = order.get();
-			if(updateOrderCommand.getStatus() == OrderStatus.SOLD) {
-				od.setStatus(OrderStatus.SOLD);
-			}else {
-				throw new StatusException();
+	public BaseApiResult changeOrderStatusSold(Long id) {
+		// passo 1 carregar a order
+		result = new BaseApiResult(true, "");
+		Order order = orderRepository.findById(id).get();
+		
+		// passo 2 validar se o OrderItem é menor ou igual a quantidade de produto.
+		var orderItems = orderItemRepository.findByOrder(order);
+		orderItems.forEach(item ->{
+			if(item.getQuantity() > item.getProduct().getStockQuantity()) {
+				result = new BaseApiResult(false, "OrderItem " + item.getProduct().getDescription() + " not available (trying to sell " + item.getQuantity() + " - current quantity = " + item.getProduct().getStockQuantity() + "). ");
 			}
-			orderRepository.save(od);
+		});
+		// passo 3 Dar baixa no valor do stockQuantity, se passo 2 for false, retornar msg de erro.
+		if(!result.isSuccess()) {
+			return result;
 		}
-		return null;
+		
+		orderItems.forEach(item -> {
+			var quantity = item.getQuantity();
+			var stock = item.getProduct().getStockQuantity();
+			var newStock = stock - quantity;
+			var product = item.getProduct();
+			product.setStockQuantity(newStock);
+			productRepository.save(product);
+		});
+		// passo 4 Mudar o OrderStatus para SOLD
+		order.setStatus(OrderStatus.SOLD);
+		orderRepository.save(order);
+		
+		result = new BaseApiResult(true, "Order sold with success!");
+		return result;
 	}
-	
 }
