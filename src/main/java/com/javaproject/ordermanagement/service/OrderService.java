@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.javaproject.ordermanagement.dto.BaseApiResult;
 import com.javaproject.ordermanagement.dto.CreateOrderCommand;
+import com.javaproject.ordermanagement.dto.CreateOrderPaymentsCommand;
 import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
 import com.javaproject.ordermanagement.dto.UpdateOrderCommand;
 
@@ -14,6 +15,8 @@ public interface OrderService {
 	GetOrderQueryResult findById(Long id);
 
 	BaseApiResult createOrder(CreateOrderCommand createOrderCommand);
+	
+	BaseApiResult orderPayments(CreateOrderPaymentsCommand createOrderPaymentsCommand);
 
 	GetOrderQueryResult updateOrder(UpdateOrderCommand updateOrderCommand, Long Id);
 

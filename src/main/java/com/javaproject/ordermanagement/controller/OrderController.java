@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.javaproject.ordermanagement.dto.BaseApiResult;
 import com.javaproject.ordermanagement.dto.CreateOrderCommand;
+import com.javaproject.ordermanagement.dto.CreateOrderPaymentsCommand;
 import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
 
 public interface OrderController {
@@ -19,6 +20,8 @@ public interface OrderController {
 	ResponseEntity<GetOrderQueryResult> findById(@PathVariable("id") Long id);
 	
 	ResponseEntity<BaseApiResult> orderCreate(@RequestBody @Valid CreateOrderCommand createOrderCommand);
+	
+	ResponseEntity<BaseApiResult> orderPayments(@RequestBody @Valid CreateOrderPaymentsCommand createOrderPaymentsCommand);
 	
 	ResponseEntity<BaseApiResult> orderUpdateStatusClosed(@PathVariable("id") Long id);
 	

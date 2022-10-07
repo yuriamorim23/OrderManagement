@@ -13,15 +13,20 @@ import org.springframework.stereotype.Service;
 import com.javaproject.ordermanagement.dto.BaseApiResult;
 import com.javaproject.ordermanagement.dto.CreateOrderCommand;
 import com.javaproject.ordermanagement.dto.CreateOrderItemCommand;
+import com.javaproject.ordermanagement.dto.CreateOrderPaymentsCommand;
+import com.javaproject.ordermanagement.dto.CreateOrderPaymentsListCommand;
 import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
 import com.javaproject.ordermanagement.dto.UpdateOrderCommand;
 import com.javaproject.ordermanagement.entities.Order;
 import com.javaproject.ordermanagement.entities.OrderItem;
+import com.javaproject.ordermanagement.entities.OrderPayments;
 import com.javaproject.ordermanagement.enums.OrderStatus;
 import com.javaproject.ordermanagement.exception.ProductNotFound;
 import com.javaproject.ordermanagement.repositories.ClientRepository;
 import com.javaproject.ordermanagement.repositories.OrderItemRepository;
+import com.javaproject.ordermanagement.repositories.OrderPaymentsRepository;
 import com.javaproject.ordermanagement.repositories.OrderRepository;
+import com.javaproject.ordermanagement.repositories.PaymentMethodRepository;
 import com.javaproject.ordermanagement.repositories.ProductRepository;
 import com.javaproject.ordermanagement.service.OrderService;
 
@@ -29,6 +34,12 @@ import com.javaproject.ordermanagement.service.OrderService;
 public class OrderServiceImpl implements OrderService {
 	
 	BaseApiResult result;
+	
+	@Autowired
+	private PaymentMethodRepository paymentMethodRepository;
+	
+	@Autowired
+	private OrderPaymentsRepository orderPaymentsRepository;
 	
 	@Autowired
 	private OrderRepository orderRepository;
@@ -115,7 +126,11 @@ public class OrderServiceImpl implements OrderService {
 
 	@Transactional
 	public BaseApiResult changeOrderStatusClosed(Long id) {
-		Order order = orderRepository.findById(id).get();
+		var order = orderRepository.findById(id).orElse(null);
+		if(order == null)
+		{
+			return new BaseApiResult(false, "Order Id " + id + " does not exists.");
+		}
 		order.setStatus(OrderStatus.CLOSED);
 		orderRepository.save(order);
 		var result = new BaseApiResult(true, "Order closed with success!");
@@ -126,7 +141,11 @@ public class OrderServiceImpl implements OrderService {
 	public BaseApiResult changeOrderStatusSold(Long id) {
 		// passo 1 carregar a order
 		result = new BaseApiResult(true, "");
-		Order order = orderRepository.findById(id).get();
+		var order = orderRepository.findById(id).orElse(null);
+		if(order == null)
+		{
+			return new BaseApiResult(false, "Order Id " + id + " does not exists.");
+		}
 		
 		// passo 2 validar se o OrderItem é menor ou igual a quantidade de produto.
 		var orderItems = orderItemRepository.findByOrder(order);
@@ -155,4 +174,25 @@ public class OrderServiceImpl implements OrderService {
 		result = new BaseApiResult(true, "Order sold with success!");
 		return result;
 	}
+
+	@Transactional
+	public BaseApiResult orderPayments(CreateOrderPaymentsCommand createOrderPaymentsCommand) {
+		var order = orderRepository.findById(createOrderPaymentsCommand.getOrderId()).orElse(null);
+		if(order == null)
+		{
+			return new BaseApiResult(false, "Order Id " + createOrderPaymentsCommand.getOrderId() + " does not exists.");
+		}
+		
+		
+		var result = new BaseApiResult(true, "Order payed with success!");
+		return result;
+	}
+	
+	/*public OrderPayments savePayments(CreateOrderPaymentsCommand createOrderPaymentsCommand) {
+		OrderPayments orderPayments = new OrderPayments();
+		orderPayments.setOrder(orderRepository.findById(createOrderPaymentsCommand.getOrderId()).get());
+		return orderPayments;
+		
+	}*/
+	
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.javaproject.ordermanagement.controller.OrderController;
 import com.javaproject.ordermanagement.dto.BaseApiResult;
 import com.javaproject.ordermanagement.dto.CreateOrderCommand;
+import com.javaproject.ordermanagement.dto.CreateOrderPaymentsCommand;
 import com.javaproject.ordermanagement.dto.GetOrderQueryResult;
 import com.javaproject.ordermanagement.service.OrderService;
 
@@ -55,6 +56,11 @@ public class OrderControllerImpl implements OrderController {
 	@PostMapping("/sold/{id}")
 	public ResponseEntity<BaseApiResult> orderUpdateStatusSold(@PathVariable("id") Long id) {
 		return new ResponseEntity<>(service.changeOrderStatusSold(id), HttpStatus.OK);
+	}
+
+	@PostMapping("/payment")
+	public ResponseEntity<BaseApiResult> orderPayments(@Valid CreateOrderPaymentsCommand createOrderPaymentsCommand) {
+		return new ResponseEntity<>(service.orderPayments(createOrderPaymentsCommand), HttpStatus.OK);
 	}
 
 }
