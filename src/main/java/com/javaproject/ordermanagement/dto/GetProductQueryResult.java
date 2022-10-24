@@ -1,33 +1,31 @@
 package com.javaproject.ordermanagement.dto;
 
-import com.javaproject.ordermanagement.entities.Product;
-
 public class GetProductQueryResult {
-	
+
 	private Long id;
-	private Long code;
 	private String description;
 	private Double price;
 	private Double minPrince;
 	private Integer stockQuantity;
-	
-	public GetProductQueryResult() {}
-	
-	public GetProductQueryResult(Product product) {
-		this.setId(product.getId());
-		this.code = product.getCode();
-		this.description = product.getDescription();
-		this.price = product.getPrice();
-		this.minPrince = product.getMinPrince();
-		this.stockQuantity = product.getStockQuantity();
+
+	public GetProductQueryResult() {
 	}
 
-	public Long getCode() {
-		return code;
+	public GetProductQueryResult(Long id, String description, Double price, Double minPrince, Integer stockQuantity) {
+		super();
+		this.id = id;
+		this.description = description;
+		this.price = price;
+		this.minPrince = minPrince;
+		this.stockQuantity = stockQuantity;
 	}
 
-	public void setCode(Long code) {
-		this.code = code;
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getDescription() {
@@ -62,11 +60,4 @@ public class GetProductQueryResult {
 		this.stockQuantity = stockQuantity;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 }

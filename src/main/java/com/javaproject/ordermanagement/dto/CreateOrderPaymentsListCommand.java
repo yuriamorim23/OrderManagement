@@ -1,9 +1,13 @@
 package com.javaproject.ordermanagement.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class CreateOrderPaymentsListCommand {
 
+	@NotNull(message = "The field needs to be filled")
 	private Long paymentId;
 
+	@NotNull(message = "The field needs to be filled")
 	private Double value;
 
 	public Long getPaymentId() {

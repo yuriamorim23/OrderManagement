@@ -1,16 +1,16 @@
 package com.javaproject.ordermanagement.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.javaproject.ordermanagement.dto.GetProductQueryResult;
 import com.javaproject.ordermanagement.dto.CreateProductCommand;
+import com.javaproject.ordermanagement.dto.GetProductQueryResult;
 import com.javaproject.ordermanagement.dto.UpdateProductCommand;
 import com.javaproject.ordermanagement.entities.Product;
 import com.javaproject.ordermanagement.exception.MinPriceValidation;
@@ -23,20 +23,22 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductRepository repository;
-	
-	public List<GetProductQueryResult> findAll(){
-		List<Product> all = repository.findAll();
-		return convertListToDto(all);
-	}
-	
-	private static List<GetProductQueryResult> convertListToDto(List<Product> products){
-		return products.stream().map(GetProductQueryResult::new).collect(Collectors.toList());
+
+	public List<GetProductQueryResult> findAll() {
+		List<Product> dataBaseOrder = repository.findAll();
+		List<GetProductQueryResult> orderList = new ArrayList<GetProductQueryResult>();
+
+		dataBaseOrder.forEach(item -> {
+			orderList.add(new GetProductQueryResult(item.getId(), item.getDescription(), item.getPrice(),
+					item.getMinPrince(), item.getStockQuantity()));
+		});
+		return orderList;
 	}
 
 	@Transactional
 	public GetProductQueryResult findById(Long id) {
 		Optional<Product> optional = repository.findById(id);
-		if(optional.isPresent()) {
+		if (optional.isPresent()) {
 			return convertToDto(optional.get());
 		}
 		throw new ProductNotFound();
@@ -45,9 +47,9 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional
 	public GetProductQueryResult createProduct(CreateProductCommand createProductCommand) {
 		Product product = convertToBusiness(createProductCommand);
-		if(createProductCommand.getMinPrince() > createProductCommand.getPrice()) {
+		if (createProductCommand.getMinPrince() > createProductCommand.getPrice()) {
 			throw new MinPriceValidation();
-		}else {
+		} else {
 			product = repository.save(product);
 		}
 		return convertToDto(product);
@@ -56,13 +58,11 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional
 	public GetProductQueryResult updateProduct(UpdateProductCommand updateProductCommand, Long Id) {
 		Optional<Product> op = repository.findById(Id);
-		if(op.isPresent()) {
+		if (op.isPresent()) {
 			Product obj = op.get();
-			if(updateProductCommand.getDescription() != null 
-					&& updateProductCommand.getMinPrince() != null 
-					&& updateProductCommand.getPrice() != null
-					&& updateProductCommand.getStockQuantity() != null) {
-				if(updateProductCommand.getMinPrince() > updateProductCommand.getPrice()) {
+			if (updateProductCommand.getDescription() != null && updateProductCommand.getMinPrince() != null
+					&& updateProductCommand.getPrice() != null && updateProductCommand.getStockQuantity() != null) {
+				if (updateProductCommand.getMinPrince() > updateProductCommand.getPrice()) {
 					throw new MinPriceValidation();
 				}
 				obj.setDescription(updateProductCommand.getDescription());
@@ -78,27 +78,25 @@ public class ProductServiceImpl implements ProductService {
 
 	@Transactional
 	public void deleteById(Long id) {
-		if(repository.existsById(id)) {
+		if (repository.existsById(id)) {
 			repository.deleteById(id);
-		}else {
+		} else {
 			throw new ProductNotFound();
 		}
 	}
-	
+
 	public Product convertToBusiness(CreateProductCommand createProductCommand) {
 		Product product = new Product();
-		product.setCode(createProductCommand.getCode());
 		product.setDescription(createProductCommand.getDescription());
 		product.setPrice(createProductCommand.getPrice());
 		product.setMinPrince(createProductCommand.getMinPrince());
 		product.setStockQuantity(createProductCommand.getStockQuantity());
 		return product;
 	}
-	
+
 	public GetProductQueryResult convertToDto(Product product) {
 		GetProductQueryResult dto = new GetProductQueryResult();
 		dto.setId(product.getId());
-		dto.setCode(product.getCode());
 		dto.setDescription(product.getDescription());
 		dto.setPrice(product.getPrice());
 		dto.setMinPrince(product.getMinPrince());

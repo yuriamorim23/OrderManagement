@@ -178,21 +178,25 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public BaseApiResult orderPayments(CreateOrderPaymentsCommand createOrderPaymentsCommand) {
 		var order = orderRepository.findById(createOrderPaymentsCommand.getOrderId()).orElse(null);
-		if(order == null)
-		{
+		if(order == null){
 			return new BaseApiResult(false, "Order Id " + createOrderPaymentsCommand.getOrderId() + " does not exists.");
 		}
-		
-		
-		var result = new BaseApiResult(true, "Order payed with success!");
+		double sum = 0.0;
+		List<OrderPayments> orderPaymentList = new ArrayList<OrderPayments>();
+		for(CreateOrderPaymentsListCommand op : createOrderPaymentsCommand.getOrderPaymentsList()) {
+			var paymentMethodId = paymentMethodRepository.findById(op.getPaymentId()).orElse(null);
+			if(paymentMethodId == null){
+				return new BaseApiResult(false, "Payment Id " + op.getPaymentId() + " does not exists.");
+			}
+			var orderPayments = new OrderPayments(order, paymentMethodId, op.getValue());
+			orderPaymentList.add(orderPayments);
+			sum += op.getValue();
+		}
+		if(sum != order.getTotal()) {
+			return new BaseApiResult(false, "Payment value " + sum + " does not match with " + "oder ID " + order.getId() + " (total)- " + order.getTotal());
+		}
+		orderPaymentsRepository.saveAll(orderPaymentList);
+		var result = new BaseApiResult(true, "Order " + order.getId() + " payed with success!");
 		return result;
 	}
-	
-	/*public OrderPayments savePayments(CreateOrderPaymentsCommand createOrderPaymentsCommand) {
-		OrderPayments orderPayments = new OrderPayments();
-		orderPayments.setOrder(orderRepository.findById(createOrderPaymentsCommand.getOrderId()).get());
-		return orderPayments;
-		
-	}*/
-	
 }

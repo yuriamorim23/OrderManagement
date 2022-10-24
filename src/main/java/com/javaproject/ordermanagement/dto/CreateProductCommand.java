@@ -7,9 +7,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 public class CreateProductCommand {
-
-	@NotNull(message = "Please enter a number")
-	private Long code;
 	
 	@NotEmpty(message="The field needs to be filled")
 	@Length(min=2, max=120, message="Must contain between 2 and 120 characters")
@@ -28,14 +25,6 @@ public class CreateProductCommand {
 	private Integer stockQuantity;
 	
 	public CreateProductCommand() {}
-
-	public Long getCode() {
-		return code;
-	}
-
-	public void setCode(Long code) {
-		this.code = code;
-	}
 
 	public String getDescription() {
 		return description;
@@ -68,4 +57,5 @@ public class CreateProductCommand {
 	public void setStockQuantity(Integer stockQuantity) {
 		this.stockQuantity = stockQuantity;
 	}
+
 }

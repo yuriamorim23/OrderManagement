@@ -13,24 +13,23 @@ import javax.persistence.Table;
 @Table(name = "Product")
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Column(unique = true)
-	private Long code;
 	private String description;
 	private Double price;
 	private Double minPrince;
 	private Integer stockQuantity;
-	
-	public Product() {}
 
-	public Product(Long id, Long code, String description, Double price, Double minPrince, Integer stockQuantity) {
+	public Product() {
+	}
+
+	public Product(Long id, String description, Double price, Double minPrince, Integer stockQuantity) {
 		super();
 		this.id = id;
-		this.code = code;
 		this.description = description;
 		this.price = price;
 		this.minPrince = minPrince;
@@ -43,14 +42,6 @@ public class Product implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getCode() {
-		return code;
-	}
-
-	public void setCode(Long code) {
-		this.code = code;
 	}
 
 	public String getDescription() {
@@ -84,4 +75,5 @@ public class Product implements Serializable {
 	public void setStockQuantity(Integer stockQuantity) {
 		this.stockQuantity = stockQuantity;
 	}
+
 }
