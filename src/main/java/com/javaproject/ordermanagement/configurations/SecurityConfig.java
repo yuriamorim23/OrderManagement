@@ -6,13 +6,29 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.javaproject.ordermanagement.security.JWTHttpConfigurer;
+import com.javaproject.ordermanagement.security.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	
+	@Autowired
+	private JWTUtil jwtUtil;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	private static final String[] PUBLIC_MATCHERS = {
+			"/login/**"
+	};
 	
 	@Bean
 	public static BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -20,14 +36,27 @@ public class SecurityConfig {
 	}
 	
 	@Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers(PUBLIC_MATCHERS).permitAll()
+                .anyRequest().authenticated().and()
+                .apply(new JWTHttpConfigurer(jwtUtil)).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        return http.build();
+    }
+	
+	/*@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.httpBasic().and().authorizeHttpRequests()
 				.anyRequest().authenticated().and()
 				.csrf().disable();
+		http.addFilter(new JWTHttpConfigurer(jwtHttpConfigurer, jwtUtil));
 		return http.build();
-	}
-	
-	/*@Bean
+	}*/
+
+	@Bean
 	public InMemoryUserDetailsManager userDetailsService() {
 		return new InMemoryUserDetailsManager(
 				User.withUsername("moorne")
@@ -35,38 +64,10 @@ public class SecurityConfig {
 				.authorities("ADMIN")
 				.build()
 				);
-	}*/
+	}
 	
-	
-	/*protected void configure1(AuthenticationManagerBuilder auth) throws Exception{
-		auth.inMemoryAuthentication()
-		.withUser("moorne23")
-		.password("123")
-		.roles("ADMIN");
-	}*/
-	
-	/*@Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-            .username("user")
-            .password("password")
-            .roles("USER")
-            .build();
-        return new InMemoryUserDetailsManager(user);
-    }*/
-	
-	/*@Bean
-	public DaoAuthenticationProvider userDetailsService(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService)
-		.passwordEncoder(bCryptPasswordEncoder());
-		return new DaoAuthenticationProvider();
-	}*/
-	
-	@Autowired
-	private static UserDetailsService userDetailsService;
-	
-	public static void configure(AuthenticationManagerBuilder auth) throws Exception {
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
-
+	
 }

@@ -7,19 +7,19 @@ public enum OrderStatus {
 	CLOSED(3, "Closed");
 	
 	private int code; 
-	private String descricao;
+	private String description;
 	
 	
-	private OrderStatus(int code, String descricao) {
+	private OrderStatus(int code, String description) {
 		this.code = code;
-		this.descricao = descricao;
+		this.description = description;
 	}
 	
 	public int getCod() {
 		return code;
 	}
 	
-	public String getDescricao() {
-		return descricao;
+	public String getDescription() {
+		return description;
 	}
 }

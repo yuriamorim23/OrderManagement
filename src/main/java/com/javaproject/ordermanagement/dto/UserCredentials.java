@@ -1,17 +1,15 @@
 package com.javaproject.ordermanagement.dto;
 
-import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 
-import org.hibernate.validator.constraints.Length;
+public class UserCredentials implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-public class UserModelDto {
-
-	@NotEmpty(message = "The field needs to be filled")
-	@Length(min = 5, max = 120, message = "Must contain between 5 and 120 characters")
 	private String username;
-
-	@NotEmpty(message = "The field needs to be filled")
 	private String password;
+
+	public UserCredentials() {
+	}
 
 	public String getUsername() {
 		return username;

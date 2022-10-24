@@ -1,26 +1,28 @@
-package com.javaproject.ordermanagement.security;
+package com.javaproject.ordermanagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import com.javaproject.ordermanagement.entities.UserModel;
 import com.javaproject.ordermanagement.repositories.UserModelRepository;
+import com.javaproject.ordermanagement.security.UserSS;
 
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UserModelRepository userModelRepository;
+	private UserModelRepository repo;
 	
-	public UserDetailsServiceImpl(UserModelRepository userModelRepository) {
-		this.userModelRepository = userModelRepository;
-	}
-	
+	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserModel userModel = userModelRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("User not found with name: " + username));
-		return userModel;
+		UserModel user = repo.findByUsername(username);
+		if(user == null) {
+			throw new UsernameNotFoundException(username);
+		}
+		return new UserSS(user.getUsername(), user.getPassword(), user.getUserRoles());
 	}
-	
+
 }

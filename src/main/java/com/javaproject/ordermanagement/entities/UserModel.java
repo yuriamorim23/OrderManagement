@@ -1,21 +1,25 @@
 package com.javaproject.ordermanagement.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.javaproject.ordermanagement.enums.UserRoles;
 
 @Entity
 @Table(name = "UserModel")
-public class UserModel implements Serializable, UserDetails {
+public class UserModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -27,21 +31,35 @@ public class UserModel implements Serializable, UserDetails {
 
 	@Column
 	private String password;
-
+	
 	public UserModel() {
+		addRoles(UserRoles.USER);
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+	public UserModel(String username, String password, Set<Integer> roles) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.roles = roles;
+		addRoles(UserRoles.USER);
 	}
 
-	@Override
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name = "UserRoles")
+	private Set<Integer> roles = new HashSet<Integer>();
+	
+	public Set<UserRoles> getUserRoles(){
+		return roles.stream().map(x -> UserRoles.toEnum(x)).collect(Collectors.toSet());
+	}
+	
+	public void addRoles(UserRoles userRoles) {
+		roles.add(userRoles.getCod());
+	}
+
 	public String getPassword() {
 		return this.password;
 	}
 
-	@Override
 	public String getUsername() {
 		return this.username;
 	}
@@ -52,30 +70,6 @@ public class UserModel implements Serializable, UserDetails {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 	
 }
