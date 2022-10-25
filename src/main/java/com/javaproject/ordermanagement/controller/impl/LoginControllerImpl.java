@@ -5,12 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.javaproject.ordermanagement.dto.UserCredentials;
+import com.javaproject.ordermanagement.entities.UserModel;
 import com.javaproject.ordermanagement.security.JWTUtil;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 public class LoginControllerImpl {
@@ -19,12 +18,19 @@ public class LoginControllerImpl {
 	private JWTUtil jwtUtil;
 	
 	@PostMapping("/login")
-	ResponseEntity<String> login(@RequestBody UserCredentials userCredentials) {
+	ResponseEntity<String> login(@RequestBody UserModel userCredentials) {
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userCredentials.getUsername(),
 				userCredentials.getPassword());
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 		String toke = jwtUtil.generateToken(userCredentials.getUsername());
 		return ResponseEntity.ok(toke);
 
 	}
 }
+
+
+/*UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userCredentials.getUsername(),
+		userCredentials.getPassword());
+SecurityContextHolder.getContext().setAuthentication(authentication);
+String toke = jwtUtil.generateToken(userCredentials.getUsername());
+return ResponseEntity.ok(toke);*/

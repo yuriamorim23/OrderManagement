@@ -1,84 +1,59 @@
 package com.javaproject.ordermanagement.security;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 
-public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
-	
-	private final JWTUtil utils;
-	
-	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwt) {
-		super(authenticationManager);
-		this.utils = jwt;
-	}
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javaproject.ordermanagement.dto.UserCredentials;
 
-	public JWTUtil getUtils() {
-		return utils;
-	}
-
-	//private AuthenticationManager authenticationManager;
-
-	//private JWTUtil jwtUtil;
+public class JWTAuthenticationFilter extends AbstractHttpConfigurer<JWTAuthenticationFilter, HttpSecurity> {
 	
-	/*public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
-		this.authenticationManager = authenticationManager;
-		this.jwtUtil = jwtUtil;
-	}*/
+    private JWTUtil jwtUtil;
+    		
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+    
 	
-	/*public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) {
-		String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, password);
-		return authenticationManager.authenticate(auth);
-		
-	}*/
-	
-	/*@Bean
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return authenticationManager;	
-	}*/
-
-	/*@Override
-	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
-			Authentication auth) throws IOException, ServletException {
-		
-		String username = ((UserSS) auth.getPrincipal()).getUsername();
-		String token = jwtUtil.generateToken(username);
-		res.addHeader("Authorization", "Bearer " + token);
-		res.addHeader("access-control-expose-headers", "Authorization");
-	}*/
-	
-	/*@Override
-	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) {
-
+	public Authentication attemptAuthentication(HttpServletRequest req,
+                                                HttpServletResponse res, HttpSecurity http) throws AuthenticationException {
+		final AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 		try {
-			UserCredentials cred = new ObjectMapper().readValue(req.getInputStream(), UserCredentials.class);
-
-			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(cred.getUsername(),
-					cred.getPassword(), new ArrayList<>());
-
-			Authentication auth = authenticationManager.authenticate(authToken);
-			return auth;
-		} catch (IOException e) {
+			UserCredentials creds = new ObjectMapper()
+	                .readValue(req.getInputStream(), UserCredentials.class);	        
+	        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+	        		creds.getUsername(),
+	        		creds.getPassword(),
+	        		new ArrayList<>()));
+	        
+	        return auth;
+		}
+		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}*/
-
-
-	/*private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
-
-		public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-				org.springframework.security.core.AuthenticationException exception)
-				throws IOException, ServletException {
-			
-		}
-	}*/
-
-		/*private String json() {
-			long date = new Date().getTime();
-			return "{\"timestamp\": " + date + ", " + "\"status\": 401, " + "\"error\": \"Não autorizado\", "
-					+ "\"message\": \"Email ou senha inválidos\", " + "\"path\": \"/login\"}";
-		}*/
-
+	}
+	
+	protected void successfulAuthentication(HttpServletRequest req,
+                                            HttpServletResponse res,
+                                            FilterChain chain,
+                                            Authentication auth) throws IOException, ServletException {
+	
+		String username = ((UserSS) auth.getPrincipal()).getUsername();
+        String token = jwtUtil.generateToken(username);
+        res.addHeader("Authorization", "Bearer " + token);
+        res.addHeader("access-control-expose-headers", "Authorization");
+	}
 
 }
