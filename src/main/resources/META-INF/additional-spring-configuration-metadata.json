@@ -28,5 +28,20 @@
     "name": "rsa",
     "type": "java.lang.String",
     "description": "A description for 'rsa'"
+  },
+  {
+    "name": "default.recipient",
+    "type": "java.lang.String",
+    "description": "A description for 'default.recipient'"
+  },
+  {
+    "name": "default.sender",
+    "type": "java.lang.String",
+    "description": "A description for 'default.sender'"
+  },
+  {
+    "name": "spring.security.oauth2.resourceserver.jwt.private-key-location",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.security.oauth2.resourceserver.jwt.private-key-location'"
   }
 ]}

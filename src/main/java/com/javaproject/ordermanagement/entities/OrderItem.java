@@ -13,23 +13,24 @@ import javax.persistence.ManyToOne;
 @Entity
 public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	@ManyToOne(cascade=CascadeType.ALL)
+
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "order_id")
 	private Order order;
-	
-	@ManyToOne(cascade=CascadeType.ALL)
+
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Product product;
 
 	private Double price;
 	private Integer quantity;
 
-	public OrderItem() {}
+	public OrderItem() {
+	}
 
 	public OrderItem(Long id, Order order, Product product, Double price, Integer quantity) {
 		super();
@@ -39,7 +40,7 @@ public class OrderItem implements Serializable {
 		this.price = price;
 		this.quantity = quantity;
 	}
-	
+
 	public OrderItem(Order order, Product product, Double price, Integer quantity) {
 		this.order = order;
 		this.product = product;
@@ -86,4 +87,5 @@ public class OrderItem implements Serializable {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
+
 }
